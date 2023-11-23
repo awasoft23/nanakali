@@ -63,9 +63,7 @@
         <div style="padding: 20px">
             <div class="mt-1  grid grid-cols-3 items-center align-middle ">
                 <div class="text-lg font-bold">
-                    <div>
-                        ئەشقی: 3343 793 0750
-                    </div>
+
                     <div class="mt-1">
                         ئەیاد : 6427 755 0750
                     </div>
@@ -75,7 +73,7 @@
                     <b>پسولەی فرۆشتن</b>
                 </div>
                 <div class="text-left">
-                    <b>پەروار: </b> {{ $data->created_at->format('d/m/Y') }}
+                    <b>بەروار: </b> {{ $data->created_at->format('d/m/Y') }}
                 </div>
             </div>
             <hr class="my-2">
@@ -137,7 +135,7 @@
                         {{ $pro->code }}
                     </td>
                     <td class="text-center border">
-                        {{ $pro->colorCofe }}
+                        {{ $pro->colorCode }}
                     </td>
                     <td class="text-center border">
                         $ {{ number_format($pro->sallingPrice) }}
@@ -157,6 +155,9 @@
 
         </tbody>
     </table>
+    @foreach ($data->images as $image)
+        <img src="{{asset($image)}}" alt="">
+    @endforeach
     <table style="width: 60%; margin-right: auto;" class="border">
         <tr class="border">
             <th class="p-2 border" style="background: #2c3862;color: white;">

@@ -22,8 +22,8 @@ class SalesReport extends Page implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
     protected static ?string $navigationIcon = 'fas-bag-shopping';
-    protected static ?string $title = 'ڕاپۆرتی فرۆشتن';
-    protected static ?string $navigationGroup = 'ڕاپۆرتەکان';
+    protected static ?string $title = 'تقرير المبيعات';
+    protected static ?string $navigationGroup = 'تقاریر';
     protected static ?int $navigationSort = 50;
     public function table(Table $table): Table
     {
@@ -31,21 +31,21 @@ class SalesReport extends Page implements HasForms, HasTable
             ->paginated(false)
             ->query(SellingInvoiceProducts::query())
             ->columns([
-                TextColumn::make('SellingInvoice.id')->label('ژ. پسولە'),
+                TextColumn::make('SellingInvoice.id')->label('ر. وصل'),
                 TextColumn::make('SellingProducts.name')
-                    ->label('ناوی کاڵا'),
+                    ->label('اسم المواد'),
                 TextColumn::make('SellingProducts.code')
-                    ->label('کۆدی کاڵا'),
+                    ->label('كود المواد'),
                 TextColumn::make('SellingProducts.colorCofe')
-                    ->label('ڕەنگ'),
+                    ->label('لون'),
                 TextColumn::make('sallingPrice')
                     ->suffix(' $ ')
-                    ->label('نرخ'),
+                    ->label('سعر'),
                 TextColumn::make('qty')
                     ->formatStateUsing(fn($state, $record) => number_format($state, 0) . ' - ' . SellingProducts::find($record->selling_products_id)->unit)
-                    ->label('بڕ'),
+                    ->label('كمية'),
                 TextColumn::make('total')
-                    ->label('کۆی گشتی')
+                    ->label('مجموع')
                     ->formatStateUsing(fn($record) => '$ ' . number_format($record->qty * $record->sallingPrice, 2))
                     ->summarize(
                         [
@@ -57,11 +57,11 @@ class SalesReport extends Page implements HasForms, HasTable
 
                         ]
                     ),
-                TextColumn::make('created_at')->date('d/m/y')->label('بەروار')
+                TextColumn::make('created_at')->date('d/m/y')->label('تاریخ')
 
             ])
             ->filters([
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ], layout: FiltersLayout::AboveContent)
             ->actions([
                 // ...

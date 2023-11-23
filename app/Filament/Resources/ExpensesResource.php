@@ -22,18 +22,18 @@ use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 class ExpensesResource extends Resource
 {
     protected static ?string $model = Expenses::class;
-    protected static ?string $label = 'خەرجی';
+    protected static ?string $label = 'المصاریف';
 
 
     protected static ?string $navigationIcon = 'fas-layer-group';
 
     protected static ?string $activeNavigationIcon = 'fas-layer-group';
 
-    protected static ?string $navigationLabel = 'خەرجییەکان';
-    protected static ?string $pluralLabel = 'خەرجییەکان';
+    protected static ?string $navigationLabel = 'المصاریف';
+    protected static ?string $pluralLabel = 'المصاریف';
 
-    protected static ?string $pluralModelLabel = 'خەرجییەکان';
-    protected static ?string $recordTitleAttribute = 'خەرجییەکان';
+    protected static ?string $pluralModelLabel = 'المصاریف';
+    protected static ?string $recordTitleAttribute = 'المصاریف';
 
     protected static ?int $navigationSort = 15;
 
@@ -41,25 +41,25 @@ class ExpensesResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->label('ناوی وەرگری پارە')
-                    ->placeholder('ناوی وەرگری پارە')
-                    ->hint('تێبینی ئەم ناوە تەنها بۆ سەر پسولەیە.'),
+                TextInput::make('name')->label('اسم المستفيد')
+                    ->placeholder('اسم المستفيد')
+                    ->hint('لاحظ أن هذا الاسم مخصص للوصلات فقط.'),
                 Forms\Components\Select::make('expenses_type_id')
-                    ->label('جۆری خەرجی')
-                    ->placeholder('جۆری خەرجی')
+                    ->label('نوع الالمصاریف')
+                    ->placeholder('نوع الالمصاریف')
                     ->suffixIcon('far-clipboard')
                     ->relationship('ExpensesTypes', 'ExpenseType')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('ExpenseType')
-                            ->label('جۆری خەرجی')
-                            ->placeholder('جۆری خەرجی')
+                            ->label('نوع الالمصاریف')
+                            ->placeholder('نوع الالمصاریف')
                             ->required()
                             ->maxLength(255),
                     ])
                     ->editOptionForm([
                         Forms\Components\TextInput::make('ExpenseType')
-                            ->label('جۆری خەرجی')
-                            ->placeholder('جۆری خەرجی')
+                            ->label('نوع الالمصاریف')
+                            ->placeholder('نوع الالمصاریف')
                             ->required()
                             ->maxLength(255),
                     ])
@@ -67,11 +67,11 @@ class ExpensesResource extends Resource
                     ->searchable()
                     ->required(),
                 Forms\Components\TextInput::make('note')
-                    ->label('تێبینی')
+                    ->label('الملاحظة')
                     ->suffixIcon('far-file')
                     ->maxLength(255),
                 Select::make('priceType')
-                    ->label('جۆری دراو')
+                    ->label('نوع العملة')
                     ->searchable()
                     ->suffixIcon('fas-coins')
                     ->default(0)
@@ -82,10 +82,10 @@ class ExpensesResource extends Resource
                         1 => 'د.ع'
                     ]),
                 Forms\Components\TextInput::make('amount')
-                    ->label('بڕی پارە')
+                    ->label('مبلغ من المال')
                     ->suffix(fn(Get $get) => $get('priceType') == 0 ? '$' : 'د.ع')
                     ->required()
-                    ->numeric(),
+                    ->numeric(2),
             ]);
     }
 
@@ -99,41 +99,41 @@ class ExpensesResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ExpensesTypes.ExpenseType')
-                    ->label('جۆری خەرجی')
+                    ->label('نوع الالمصاریف')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('note')
-                    ->label('تێبینی')
+                    ->label('الملاحظة')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->searchable()
-                    ->label('بڕ')
+                    ->label('کمیة')
                     ->formatStateUsing(fn($state, Expenses $record) => $record->priceType == 0 ? '$' . number_format($state, 2) : number_format($state, 0) . 'د.ع')
                     ->summarize([
-                        Summarizer::make()->label('کۆی گشتی دۆلاری ئەمریکی')->using(function (Builder $query) {
+                        Summarizer::make()->label('مجموع دولار الامریکی')->using(function (Builder $query) {
                             return $query->where('priceType', 0)->sum('amount');
                         })->numeric(2),
-                        Summarizer::make()->label('کۆی گشتی دیناری عێراقی')->using(function (Builder $query) {
+                        Summarizer::make()->label('إجمالي الدينار العراقي')->using(function (Builder $query) {
                             return $query->where('priceType', 1)->sum('amount');
                         })->numeric(0)
                     ])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('کات و بەروار')
+                    ->label('الوقت و التاريخ')
                     ->dateTime('d/m/y H:i:s')
                     ->sortable()
                 ,
 
             ])
             ->filters([
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ])
             ->actions([
 
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Action::make('print')->hidden(auth()->user()->role == 1)->label('چاپکردن')->icon('fas-print')->url(fn($record) => '/expenses/print/' . $record->id)->openUrlInNewTab()
+                Action::make('print')->hidden(auth()->user()->role == 1)->label('الطباعة')->icon('fas-print')->url(fn($record) => '/expenses/print/' . $record->id)->openUrlInNewTab()
             ]);
     }
 

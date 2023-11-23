@@ -26,7 +26,7 @@ class ListPurchasingInvoices extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
-            Action::make('listPayments')->label('پارەدانەکان')->url('/purchasing-invoices/vendorPayments')->color(Color::Blue)->icon('fas-file-invoice-dollar'),
+            Action::make('listPayments')->label("المدفوعات")->url('/purchasing-invoices/vendorPayments')->color(Color::Blue)->icon('fas-file-invoice-dollar'),
             Action::make('payment')
                 ->hidden(auth()->user()->role == 1)
                 ->modalIcon('fas-hand-holding-dollar')
@@ -34,11 +34,11 @@ class ListPurchasingInvoices extends ListRecords
                 ->color(Color::Red)
                 ->icon('fas-hand-holding-dollar')
                 ->requiresConfirmation()
-                ->modalDescription('لەکاتی ئەنجامدانی ئەم کردارە، بڕی پارەی واصل کراو ناتوانرێت لە قەرزەکان زیاتر بێت، لەدوای واصل کردنی بڕی پارەکە، بەپێی پسولەکان بڕی پارەکە لە کۆنترین پسولەکان واصل دەکرێت بۆ نوێترین.')
-                ->modalButton('پارەدان')
-                ->label('پارەدان')->form(function (Form $form): Form {
+                ->modalDescription('"عند القيام بذلك لا يمكن أن يتجاوز المبلغ المالي المستلم القروض، وبعد استلام المبلغ المالي يتم تحويل المبلغ المالي من أقدم الوصلات إلى الأحدث حسب الوصلات."')
+                ->modalButton('دفع')
+                ->label('دفع')->form(function (Form $form): Form {
                     return $form->schema([
-                        Select::make('vendor_id')->label('فرۆشیار')->options(
+                        Select::make('vendor_id')->label('بائع')->options(
                             Vendors::all()->pluck('name', 'id')
                         )->searchable()
                             ->required()
@@ -65,11 +65,11 @@ class ListPurchasingInvoices extends ListRecords
                                 }
                             })
                             ->live()
-                            ->label('جۆری دراو'),
-                        TextInput::make('notPayment')->label('بڕی قەرز')
+                            ->label('نوع العملة'),
+                        TextInput::make('notPayment')->label('مبلغ القرض')
                             ->required()->disabled(),
-                        TextInput::make('amount')->label('بڕی پارە')
-                            ->numeric()
+                        TextInput::make('amount')->label('مبلغ من المال')
+                            ->numeric(2)
                             ->required()
                             ->maxValue(function (Get $get) {
                                 if ($get('priceType') == '$') {
@@ -82,7 +82,7 @@ class ListPurchasingInvoices extends ListRecords
                                         ->value('totall');
                                 }
                             })->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('note')->label('تێبینی')->required()
+                        TextInput::make('note')->label('الملاحظة')->required()
                     ])->columns(1);
                 })
                 ->action(function (array $data) {

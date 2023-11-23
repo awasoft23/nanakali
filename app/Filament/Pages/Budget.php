@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Avaliables;
 use App\Models\Currencies;
 use App\Models\CustomerPayments;
 use App\Models\Expenses;
@@ -16,8 +17,8 @@ use Illuminate\Support\Facades\DB;
 class Budget extends Page
 {
     protected static ?string $navigationIcon = 'fas-scale-balanced';
-    protected static ?string $title = 'پوختەی کۆمپانییا';
-    protected static ?string $navigationGroup = 'ڕاپۆرتەکان';
+    protected static ?string $title = 'میزانییة';
+    protected static ?string $navigationGroup = 'تقاریر';
     protected static ?int $navigationSort = 50;
 
     public $data = [];
@@ -46,6 +47,7 @@ class Budget extends Page
         $this->data['CustomerDebts'] = $this->data['CustomerDebts'] ? $this->data['CustomerDebts'] : 0;
         $this->data['sendedMoney'] = $this->data['sendedMoney'] ? $this->data['sendedMoney'] : 0;
         $this->data['recivedMoney'] = $this->data['recivedMoney'] ? $this->data['recivedMoney'] : 0;
+        $this->data['avaliable'] = ((Avaliables::where('type',1)->sum('dollaramount') + (Avaliables::where('type',1)->sum('dinnaramount') /  Currencies::find(1)->dinarPrice)) - (Avaliables::where('type',2)->sum('dollaramount') + (Avaliables::where('type',2)->sum('dinnaramount') /  Currencies::find(1)->dinarPrice)));
 
     }
     protected static string $view = 'filament.pages.budget';

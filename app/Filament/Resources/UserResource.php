@@ -18,19 +18,19 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $label = 'بەکارهێنەر';
+    protected static ?string $label = 'مستخدم';
 
-    protected static ?string $navigationGroup = 'ڕێکخستنەکان';
+    protected static ?string $navigationGroup = 'إعدادات';
 
     protected static ?string $navigationIcon = 'far-user';
 
     protected static ?string $activeNavigationIcon = 'fas-user';
 
-    protected static ?string $navigationLabel = 'بەکارهێنەران';
-    protected static ?string $pluralLabel = 'بەکارهێنەران';
+    protected static ?string $navigationLabel = "المستخدمون";
+    protected static ?string $pluralLabel = "المستخدمون";
 
-    protected static ?string $pluralModelLabel = 'بەکارهێنەران';
-    protected static ?string $recordTitleAttribute = 'بەکارهێنەران';
+    protected static ?string $pluralModelLabel = "المستخدمون";
+    protected static ?string $recordTitleAttribute = "المستخدمون";
 
 
 
@@ -43,7 +43,7 @@ class UserResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'ناو' => $record->name,
+            'اسم' => $record->name,
         ];
     }
     public static function form(Form $form): Form
@@ -51,15 +51,15 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->placeholder('ناو')
+                    ->placeholder('اسم')
                     ->autofocus()
                     ->suffixIcon('far-user')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
-                    ->placeholder('پۆستەی ئەلیکترۆنی')
-                    ->label('پۆستەی ئەلیکترۆنی')
+                    ->placeholder('بريد إلكتروني')
+                    ->label('بريد إلكتروني')
                     ->suffixIcon('far-envelope')
                     ->unique(ignoreRecord: true)
                     ->email()
@@ -68,8 +68,8 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
-                    ->placeholder('وشەی نهێنی')
-                    ->label('وشەی نهێنی')
+                    ->placeholder('كلمة المرور')
+                    ->label('كلمة المرور')
                     ->suffixIcon('fas-unlock')
                     ->password()
                     ->autofocus(false)
@@ -79,12 +79,12 @@ class UserResource extends Resource
                     ->required(fn(string $operation): bool => $operation === 'create'),
                 Forms\Components\Select::make('role')
                     ->options([
-                        0 => 'ژمێریار',
-                        1 => 'بەڕێوەبەر'
+                        0 => 'محاسب',
+                        1 => "المدير"
                     ])
                     ->default(0)
-                    ->placeholder('پلە')
-                    ->label('پلە')
+                    ->placeholder("سلطة")
+                    ->label("سلطة")
                     ->suffixIcon('fas-layer-group')
                     ->searchable()
                     ->required(),
@@ -98,24 +98,24 @@ class UserResource extends Resource
 
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->label('پۆستەی ئەلیکترۆنی')
+                    ->label('بريد إلكتروني')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role')
-                    ->formatStateUsing(fn($state) => $state == 0 ? 'ژمێریار' : 'بەڕێوەبەر')
-                    ->label('پلە')
+                    ->formatStateUsing(fn($state) => $state == 0 ? 'محاسب' : "المدير")
+                    ->label("سلطة")
                     ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('role')
                     ->options([
-                        0 => 'ژمێریار',
-                        1 => 'بەڕێوەبەر'
+                        0 => 'محاسب',
+                        1 => "المدير"
                     ])
                     ->default(0)
-                    ->label('پلە')
+                    ->label("سلطة")
                     ->searchable()
 
             ])
@@ -124,7 +124,7 @@ class UserResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                ])->label('کردارەکان')->button()
+                ])->label('الإجراءات')->button()
             ])
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),

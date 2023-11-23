@@ -11,7 +11,7 @@ class SellingInvoice extends Model
 {
     use HasFactory;
     protected $guarded = [];
-
+    protected $casts = ['images'=>'array'];
     public function Customers(): BelongsTo
     {
         return $this->belongsTo(Customers::class, 'customers_id');

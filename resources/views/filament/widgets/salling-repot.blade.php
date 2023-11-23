@@ -3,7 +3,9 @@
         <div class="flex items-center gap-x-3">
             <div class="flex-1">
                 <a rel="noopener noreferrer" target="_blank">
-                    <span class="text-4xl font-bold">ڕاپۆرتی فرۆشتن</span>
+                    <span class="text-4xl font-bold">
+                        تقرير المبيعات
+                    </span>
                 </a>
 
             </div>
@@ -11,7 +13,7 @@
                 <x-filament::link color="gray" href="/sales-report" icon="fas-file-contract"
                     icon-alias="panels::widgets.filament-info.open-documentation-button" rel="noopener noreferrer"
                     target="_blank">
-                    بینین
+                    عرض
                 </x-filament::link>
 
             </div>

@@ -31,7 +31,7 @@ use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 class CustomerPayments extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
-    protected static ?string $title = ' پارە وەرگرتنەکان';
+    protected static ?string $title = 'الوصلات';
 
     protected static string $resource = SellingInvoiceResource::class;
     protected function getHeaderActions(): array
@@ -44,11 +44,11 @@ class CustomerPayments extends Page implements HasForms, HasTable
                 ->color(Color::Red)
                 ->icon('fas-hand-holding-dollar')
 
-                ->modalDescription('لەکاتی ئەنجامدانی ئەم کردارە، بڕی پارەی واصل کراو ناتوانرێت لە قەرزەکان زیاتر بێت، لەدوای واصل کردنی بڕی پارەکە، بەپێی پسولەکان بڕی پارەکە لە کۆنترین پسولەکان واصل دەکرێت بۆ نوێترین.')
+                ->modalDescription('"عند القيام بذلك لا يمكن أن يتجاوز المبلغ المالي المستلم القروض، وبعد استلام المبلغ المالي يتم تحويل المبلغ المالي من أقدم الوصلات إلى الأحدث حسب الوصلات."')
                 ->modalButton(' وەرگرتن')
-                ->label('پارە وەرگرتن')->form(function (Form $form): Form {
+                ->label('تلقي الأموال')->form(function (Form $form): Form {
                     return $form->schema([
-                        Select::make('customers_id')->label('فرۆشیار')->options(
+                        Select::make('customers_id')->label('بائع')->options(
                             Customers::all()->pluck('name', 'id')
                         )->searchable()
                             ->required()
@@ -98,11 +98,11 @@ class CustomerPayments extends Page implements HasForms, HasTable
 
                             })
                             ->live()
-                            ->label('جۆری دراو'),
-                        TextInput::make('notPayment')->label('بڕی قەرز')
+                            ->label('نوع العملة'),
+                        TextInput::make('notPayment')->label('مبلغ القرض')
                             ->disabled(),
-                        TextInput::make('discount')->label('داشکان')
-                            ->numeric()
+                        TextInput::make('discount')->label('تخفيض')
+                            ->numeric(2)
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
                                 if ($get('priceType') == '$') {
                                     $set(
@@ -127,11 +127,11 @@ class CustomerPayments extends Page implements HasForms, HasTable
                             ->live(onBlur: true)
                             ->required()
                             ->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('afterDiscount')->label('دوای داشکان')
+                        TextInput::make('afterDiscount')->label('بعد الخصم')
                             ->disabled()
                             ->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('amount')->label('بڕی واصل کردن')
-                            ->numeric()
+                        TextInput::make('amount')->label('مبلغ التسليم')
+                            ->numeric(2)
                             ->live(onBlur: true)
                             ->hint(fn($state) => number_format($state))
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
@@ -164,11 +164,11 @@ class CustomerPayments extends Page implements HasForms, HasTable
                                 }
                             })->suffix(fn(Get $get) => $get('priceType')),
 
-                        TextInput::make('total')->label('ماوە')
+                        TextInput::make('total')->label('دین')
                             ->disabled()
                             ->required()
                             ->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('note')->label('تێبینی')->required()->columnSpanFull()
+                        TextInput::make('note')->label('الملاحظة')->required()->columnSpanFull()
                     ])->columns(2);
                 })
                 ->action(function (array $data) {
@@ -208,11 +208,11 @@ class CustomerPayments extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->modelLabel(' پارە وەرگرتنەکان')
-            ->pluralModelLabel(' پارە وەرگرتنەکان')
+            ->modelLabel('الوصلات')
+            ->pluralModelLabel('الوصلات')
             ->query(ModelsCustomerPayments::query()->orderBy('created_at', 'desc'))
             ->columns([
-                TextColumn::make('Customers.name')->label('کڕیار')->searchable(),
+                TextColumn::make('Customers.name')->label('عميل')->searchable(),
                 TextColumn::make('amount')
                     ->suffix(' $ ')
                     ->description(function ($record) {
@@ -222,16 +222,16 @@ class CustomerPayments extends Page implements HasForms, HasTable
                         return $record->priceType != '$' ? number_format($amount, 0) . ' د.ع ' : '';
                     })
                     ->numeric(2)
-                    ->label('بڕی پارە')
+                    ->label('مبلغ من المال')
                     ->searchable()
                     ->summarize([
-                        Summarizer::make()->label('دۆلاری ئەمریکی')->using(function (Builder $query) {
+                        Summarizer::make()->label('الدولار الأمريكي')->using(function (Builder $query) {
                             return $query->where('priceType', '$')->sum('amount');
                         })->numeric(2),
-                        Summarizer::make()->label('دیناری عێراقی')->using(function (Builder $query) {
+                        Summarizer::make()->label('الدينار العراقي')->using(function (Builder $query) {
                             return round($query->where('priceType', '!=', '$')->sum(DB::raw('amount * dolarPrice')) / 250) * 250;
                         })->numeric(0),
-                        Summarizer::make()->label('کۆی گشتی بە دۆلار')->using(function (Builder $query) {
+                        Summarizer::make()->label('الإجمالي بالدولار')->using(function (Builder $query) {
                             return $query->sum(DB::raw('amount'));
                         })->numeric(0),
                     ]),
@@ -244,31 +244,31 @@ class CustomerPayments extends Page implements HasForms, HasTable
                         return $record->priceType != '$' ? number_format($amount, 0) . ' د.ع ' : '';
                     })
                     ->numeric(2)
-                    ->label('داشکان')
+                    ->label('تخفيض')
                     ->searchable()
                     ->summarize([
-                        Summarizer::make()->label('دۆلاری ئەمریکی')->using(function (Builder $query) {
+                        Summarizer::make()->label('الدولار الأمريكي')->using(function (Builder $query) {
                             return $query->where('priceType', '$')->sum('discount');
                         })->numeric(2),
-                        Summarizer::make()->label('دیناری عێراقی')->using(function (Builder $query) {
+                        Summarizer::make()->label('الدينار العراقي')->using(function (Builder $query) {
                             return round($query->where('priceType', '!=', '$')->sum(DB::raw('discount * dolarPrice')) / 250) * 250;
                         })->numeric(0),
-                        Summarizer::make()->label('کۆی گشتی بە دۆلار')->using(function (Builder $query) {
+                        Summarizer::make()->label('الإجمالي بالدولار')->using(function (Builder $query) {
                             return $query->sum(DB::raw('discount'));
                         })->numeric(0),
                     ]),
-                TextColumn::make('dolarPrice')->label('نرخی دۆلار')->numeric()->searchable(),
-                TextColumn::make('note')->label('تێبینی')->searchable(),
-                TextColumn::make('created_at')->label('کات و بەروار')->dateTime('d/m/Y H:i:s'),
+                TextColumn::make('dolarPrice')->label('سعر الدولار')->numeric(2)->searchable(),
+                TextColumn::make('note')->label('الملاحظة')->searchable(),
+                TextColumn::make('created_at')->label('الوقت و التاريخ')->dateTime('d/m/Y H:i:s'),
             ])
             ->filters([
-                SelectFilter::make('customers_id')->label('کڕیار')->options(
+                SelectFilter::make('customers_id')->label('عميل')->options(
                     Customers::all()->pluck('name', 'id')
                 )->searchable(),
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ])
             ->actions([
-                Action::make('print')->label('چاپکردن')->hidden(auth()->user()->role == 1)->url(fn($record) => '/selling-invoices/printPayment/' . $record->id)->icon('fas-print')->openUrlInNewTab()
+                Action::make('print')->label('الطباعة')->hidden(auth()->user()->role == 1)->url(fn($record) => '/selling-invoices/printPayment/' . $record->id)->icon('fas-print')->openUrlInNewTab()
             ]);
     }
 

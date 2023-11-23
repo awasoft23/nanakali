@@ -17,14 +17,14 @@ class SellingProductsResource extends Resource
 
 
 
-    protected static ?string $label = 'کاڵا';
-    protected static ?string $navigationGroup = 'فرۆشتن';
+    protected static ?string $label = 'المواد';
+    protected static ?string $navigationGroup = 'يبيع';
     protected static ?string $navigationIcon = 'fab-codepen';
     protected static ?string $activeNavigationIcon = 'fab-codepen';
-    protected static ?string $navigationLabel = 'کاڵاکان';
-    protected static ?string $pluralLabel = 'کاڵاکان';
-    protected static ?string $pluralModelLabel = 'کاڵاکان';
-    protected static ?string $recordTitleAttribute = 'کاڵاکان';
+    protected static ?string $navigationLabel = 'المواد';
+    protected static ?string $pluralLabel = 'المواد';
+    protected static ?string $pluralModelLabel = 'المواد';
+    protected static ?string $recordTitleAttribute = 'المواد';
     protected static ?int $navigationSort = 20;
 
     public static function form(Form $form): Form
@@ -32,33 +32,33 @@ class SellingProductsResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->placeholder('جۆری مەڕمەڕ')
-                    ->label('جۆری مەڕمەڕ')
+                    ->placeholder("نوع المواد")
+                    ->label("نوع المواد")
                     ->suffixIcon('fas-box-archive')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('code')
-                    ->placeholder('جۆری قالب')
-                    ->label('جۆری قالب')
+                    ->placeholder("نوع القالب")
+                    ->label("نوع القالب")
                     ->required()
                     ->suffixIcon('fas-barcode')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('colorCofe')
-                    ->placeholder('کۆدی ڕەنگ')
-                    ->label('کۆدی ڕەنگ')
+                    ->placeholder('رمز اللون')
+                    ->label('رمز اللون')
                     ->required()
                     ->suffixIcon('fas-barcode')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('unit')
-                    ->placeholder('یەکە')
-                    ->label('یەکە')
-                    ->default('مەتر')
+                    ->placeholder('متر')
+                    ->label('متر')
+                    ->default('متر')
                     ->suffixIcon('fas-notes-medical')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('salePrice')
-                    ->placeholder('نرخی فرۆشتن')
-                    ->label('نرخی فرۆشتن')
+                    ->placeholder('سعر البيع')
+                    ->label('سعر البيع')
                     ->required()
                     ->suffix('$')
                     ->maxLength(255),
@@ -72,21 +72,21 @@ class SellingProductsResource extends Resource
 
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('جۆری مەڕمەڕ')
+                    ->label("نوع المواد")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('code')
-                    ->label('جۆری قالب')
+                    ->label("نوع القالب")
                     ->searchable(),
                 Tables\Columns\TextColumn::make('colorCofe')
-                    ->label('کۆدی ڕەنگ')
+                    ->label('رمز اللون')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('unit')
-                    ->label('یەکە')
+                    ->label('متر')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('salePrice')
                     ->suffix(' $ ')
                     ->numeric(2)
-                    ->label('نرخی کڕین')
+                    ->label('سعر الشراء')
                     ->searchable(),
             ])
             ->filters([

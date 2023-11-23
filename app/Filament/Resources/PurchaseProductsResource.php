@@ -16,20 +16,20 @@ class PurchaseProductsResource extends Resource
 {
     protected static ?string $model = PurchaseProducts::class;
 
-    protected static ?string $label = 'کاڵا';
+    protected static ?string $label = 'المواد';
 
-    protected static ?string $navigationGroup = 'کڕین';
+    protected static ?string $navigationGroup = 'شراء';
 
     protected static ?string $navigationIcon = 'fas-box-archive';
 
     protected static ?string $activeNavigationIcon = 'fas-box-open';
 
-    protected static ?string $navigationLabel = 'کاڵاکان';
-    protected static ?string $pluralLabel = 'کاڵاکان';
+    protected static ?string $navigationLabel = 'المواد';
+    protected static ?string $pluralLabel = 'المواد';
 
-    protected static ?string $pluralModelLabel = 'کاڵاکان';
+    protected static ?string $pluralModelLabel = 'المواد';
 
-    protected static ?string $recordTitleAttribute = 'کاڵاکان';
+    protected static ?string $recordTitleAttribute = 'المواد';
 
     protected static ?int $navigationSort = 30;
 
@@ -38,26 +38,26 @@ class PurchaseProductsResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('ناو')
-                    ->placeholder('ناو')
+                    ->label('اسم')
+                    ->placeholder('اسم')
                     ->suffixIcon('fas-box-archive')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('code')
-                    ->label('کۆدی کاڵا')
-                    ->placeholder('کۆدی کاڵا')
+                    ->label('كود المواد')
+                    ->placeholder('كود المواد')
                     ->suffixIcon('fas-barcode')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('unit')
-                    ->label('یەکە')
-                    ->placeholder('یەکە')
+                    ->label('متر')
+                    ->placeholder('متر')
                     ->suffixIcon('fas-notes-medical')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('purchasePricw')
-                    ->label('نرخی کڕین')
-                    ->placeholder('نرخی کڕین')
+                    ->label('سعر الشراء')
+                    ->placeholder('سعر الشراء')
                     ->suffix('$')
                     ->required()
                     ->maxLength(255),
@@ -71,21 +71,21 @@ class PurchaseProductsResource extends Resource
 
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('code')
                     ->label('کۆد')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('unit')
-                    ->label('یەکە')
+                    ->label('متر')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('purchasePricw')
                     ->suffix(' $ ')
                     ->numeric(2)
-                    ->label('نرخی کڕین')
+                    ->label('سعر الشراء')
                     ->searchable(),
-                TextColumn::make('purchasing_invoice_products_sum_qty')->sum('PurchasingInvoiceProducts', 'qty')->label('کڕین')->numeric(0),
-                TextColumn::make('used_products_sum_qty')->sum('UsedProducts', 'qty')->label('بەکارهاتوو')->numeric(0),
+                TextColumn::make('purchasing_invoice_products_sum_qty')->sum('PurchasingInvoiceProducts', 'qty')->label('شراء')->numeric(0),
+                TextColumn::make('used_products_sum_qty')->sum('UsedProducts', 'qty')->label('مستخدم')->numeric(0),
                 TextColumn::make('status')->formatStateUsing(fn($record) => number_format($record->purchasing_invoice_products_sum_qty - $record->used_products_sum_qty, 0) . ' - ' . $record->unit)
 
 

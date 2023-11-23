@@ -25,18 +25,18 @@ class ListSellingInvoices extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
-            Action::make('listPayments')->label(' پارە وەرگرتنەکان')->url('/selling-invoices/CustomerPayments')->color(Color::Blue)->icon('fas-file-invoice-dollar'),
+            Action::make('listPayments')->label('الوصلات')->url('/selling-invoices/CustomerPayments')->color(Color::Blue)->icon('fas-file-invoice-dollar'),
             Action::make('payment')->hidden(auth()->user()->role == 1)
                 ->modalIcon('fas-hand-holding-dollar')
                 ->modalIconColor(Color::Red)
                 ->color(Color::Red)
                 ->icon('fas-hand-holding-dollar')
 
-                ->modalDescription('لەکاتی ئەنجامدانی ئەم کردارە، بڕی پارەی واصل کراو ناتوانرێت لە قەرزەکان زیاتر بێت، لەدوای واصل کردنی بڕی پارەکە، بەپێی پسولەکان بڕی پارەکە لە کۆنترین پسولەکان واصل دەکرێت بۆ نوێترین.')
-                ->modalButton(' وەرگرتن')
-                ->label('پارە وەرگرتن')->form(function (Form $form): Form {
+                ->modalDescription('"عند القيام بذلك لا يمكن أن يتجاوز المبلغ المالي المستلم القروض، وبعد استلام المبلغ المالي يتم تحويل المبلغ المالي من أقدم الوصلات إلى الأحدث حسب الوصلات."')
+                ->modalButton('يحصل')
+                ->label('تلقي الأموال')->form(function (Form $form): Form {
                     return $form->schema([
-                        Select::make('customers_id')->label('فرۆشیار')->options(
+                        Select::make('customers_id')->label('بائع')->options(
                             Customers::all()->pluck('name', 'id')
                         )->searchable()
                             ->required()
@@ -86,11 +86,11 @@ class ListSellingInvoices extends ListRecords
 
                             })
                             ->live()
-                            ->label('جۆری دراو'),
-                        TextInput::make('notPayment')->label('بڕی قەرز')
+                            ->label('نوع العملة'),
+                        TextInput::make('notPayment')->label('مبلغ القرض')
                             ->disabled(),
-                        TextInput::make('discount')->label('داشکان')
-                            ->numeric()
+                        TextInput::make('discount')->label('تخفيض')
+                            ->numeric(2)
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
                                 if ($get('priceType') == '$') {
                                     $set(
@@ -115,11 +115,11 @@ class ListSellingInvoices extends ListRecords
                             ->live(onBlur: true)
                             ->required()
                             ->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('afterDiscount')->label('دوای داشکان')
+                        TextInput::make('afterDiscount')->label('بعد الخصم')
                             ->disabled()
                             ->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('amount')->label('بڕی واصل کردن')
-                            ->numeric()
+                        TextInput::make('amount')->label('مبلغ التسليم')
+                            ->numeric(2)
                             ->live(onBlur: true)
                             ->hint(fn($state) => number_format($state))
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
@@ -152,11 +152,11 @@ class ListSellingInvoices extends ListRecords
                                 }
                             })->suffix(fn(Get $get) => $get('priceType')),
 
-                        TextInput::make('total')->label('ماوە')
+                        TextInput::make('total')->label('دین')
                             ->disabled()
                             ->required()
                             ->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('note')->label('تێبینی')->required()->columnSpanFull()
+                        TextInput::make('note')->label('الملاحظة')->required()->columnSpanFull()
                     ])->columns(2);
                 })
                 ->action(function (array $data) {

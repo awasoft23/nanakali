@@ -51,9 +51,9 @@
                 <div class=" flex justify-between items-center align-middle border-b-2"
                     style="background: #2c3862;border-bottom:6px solid #475569">
                     <div class="px-4 text-white font-bold   " style="font-size: 30pt">
-                        نانــەکەلــی مــەڕمــەڕ
+                        مواد نانکلي
                         <div style="font-size: 16pt; font-weight: bold; margin:10px 0 ">
-                            بۆ مەڕمەڕی دەستکرد
+                            للمواد الصناعي
                         </div>
                     </div>
                     <div class="bg-white">
@@ -71,14 +71,14 @@
                         class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 dark:bg-custom-500 dark:hover:bg-custom-400 focus:ring-custom-500/50 dark:focus:ring-custom-400/50 fi-ac-btn-action"
                         type="button" onclick="window.print()">
                         <span class="fi-btn-label">
-                            چاپکردن
+                            الطباعة
                         </span>
                     </button>
                 </div>
             </header>
             <h1
                 class="fi-header-heading text-2xl font-bold text-center tracking-center text-gray-950 dark:text-white sm:text-3xl">
-                ڕاپۆرتی فرۆشیارەکان
+                تقریر البائعون
             </h1>
 
             <hr class="my-4">

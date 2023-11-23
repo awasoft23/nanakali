@@ -5,9 +5,11 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CustomersResource\Pages;
 use App\Models\Customers;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Table;
@@ -18,20 +20,20 @@ class CustomersResource extends Resource
     protected static ?string $model = Customers::class;
 
 
-    protected static ?string $label = 'کڕیار';
+    protected static ?string $label = 'عميل';
 
-    protected static ?string $navigationGroup = 'ڕێکخستنەکان';
+    protected static ?string $navigationGroup = 'إعدادات';
 
     protected static ?string $navigationIcon = 'far-handshake';
 
     protected static ?string $activeNavigationIcon = 'fas-handshake';
 
-    protected static ?string $navigationLabel = 'کڕیارەکان';
-    protected static ?string $pluralLabel = 'کڕیارەکان';
+    protected static ?string $navigationLabel = 'العملاء';
+    protected static ?string $pluralLabel = 'العملاء';
 
-    protected static ?string $pluralModelLabel = 'کڕیارەکان';
+    protected static ?string $pluralModelLabel = 'العملاء';
 
-    protected static ?string $recordTitleAttribute = 'کڕیارەکان';
+    protected static ?string $recordTitleAttribute = 'العملاء';
 
     protected static ?int $navigationSort = 42;
     public static function getGloballySearchableAttributes(): array
@@ -41,9 +43,9 @@ class CustomersResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'ناو' => $record->name,
-            'ژمارەی مۆبایل' => $record->phone,
-            'ناونیشان' => $record->address,
+            'اسم' => $record->name,
+            'رقم الهاتف' => $record->phone,
+            'عنوان' => $record->address,
         ];
     }
     public static function form(Form $form): Form
@@ -51,21 +53,21 @@ class CustomersResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->placeholder('ناو')
+                    ->placeholder('اسم')
                     ->suffixIcon('far-user')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
-                    ->placeholder('ژمارەی مۆبایل')
-                    ->label('ژمارەی مۆبایل')
+                    ->placeholder('رقم الهاتف')
+                    ->label('رقم الهاتف')
                     ->suffixIcon('fas-phone-volume')
                     ->tel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
-                    ->label('ناونیشان')
-                    ->placeholder('ناونیشان')
+                    ->label('عنوان')
+                    ->placeholder('عنوان')
                     ->suffixIcon('fas-location-crosshairs')
                     ->required()
                     ->maxLength(255),
@@ -78,13 +80,13 @@ class CustomersResource extends Resource
             ->modifyQueryUsing(fn(\Illuminate\Database\Eloquent\Builder $query) => $query->orderBy('id', 'desc'))
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
-                    ->label('ژمارەی مۆبایل')
+                    ->label('رقم الهاتف')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('address')
-                    ->label('ناونیشان')
+                    ->label('عنوان')
                     ->searchable(),
             ])
             ->filters([
@@ -94,8 +96,16 @@ class CustomersResource extends Resource
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
-                    DeleteAction::make()
-                ])->label('کردارەکان')->button(),
+                    DeleteAction::make(),
+                    Action::make('کشف حساب')
+                    ->form([
+                        DatePicker::make('from')->label('من'),
+                        DatePicker::make('to')->label('الی'),
+
+                    ])
+                    ->requiresConfirmation()
+                    ->action(fn($record,array $data)=> redirect('/customers/report/'.$record->id.'/'.$data['from'].'/'.$data['to']))->label('کشف حساب')
+                ])->label('الإجراءات')->button(),
             ])
             ->bulkActions([
 
@@ -116,6 +126,7 @@ class CustomersResource extends Resource
             'create' => Pages\CreateCustomers::route('/create'),
             'view' => Pages\ViewCustomers::route('/{record}'),
             'edit' => Pages\EditCustomers::route('/{record}/edit'),
+            'report' => Pages\PrintA::route('report/{id}/{from}/{to}'),
         ];
     }
 }

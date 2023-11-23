@@ -19,26 +19,26 @@ class EmployeesAbsensesList extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
     protected static string $resource = EmployeesResource::class;
-    protected static ?string $title = ' لیستی غیابات';
-    protected ?string $heading = ' لیستی غیابات';
-    protected static ?string $navigationLabel = ' لیستی غیابات';
+    protected static ?string $title = 'قائمة الغياب';
+    protected ?string $heading = 'قائمة الغياب';
+    protected static ?string $navigationLabel = 'قائمة الغياب';
 
 
     public function table(Table $table): Table
     {
         return $table
-            ->modelLabel(' پارە وەرگرتنەکان')
-            ->pluralModelLabel(' پارە وەرگرتنەکان')
+            ->modelLabel('الوصلات')
+            ->pluralModelLabel('الوصلات')
             ->query(EmployeesAbsenses::query()->orderBy('created_at', 'desc'))
             ->columns([
-                TextColumn::make('Employees.name')->label('فەرمانبەر')->searchable(),
-                TextColumn::make('created_at')->label('بەروار')->dateTime('d/m/Y'),
+                TextColumn::make('Employees.name')->label('موظف')->searchable(),
+                TextColumn::make('created_at')->label('تاریخ')->dateTime('d/m/Y'),
             ])
             ->filters([
-                SelectFilter::make('employees_id')->label('فەرمانبەر')->options(
+                SelectFilter::make('employees_id')->label('موظف')->options(
                     Employees::all()->pluck('name', 'id')
                 )->searchable(),
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ]);
     }
 

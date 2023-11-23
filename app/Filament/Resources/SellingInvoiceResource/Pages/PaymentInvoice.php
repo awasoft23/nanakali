@@ -11,7 +11,7 @@ class PaymentInvoice extends Page
 {
     protected static string $resource = SellingInvoiceResource::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $title = 'پسولە';
+    protected static ?string $title = 'وصل';
     public $data, $invoiceProducts, $customerDebt;
     public function mount(): void
     {

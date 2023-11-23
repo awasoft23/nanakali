@@ -20,18 +20,18 @@ class VendorsResource extends Resource
 {
     protected static ?string $model = Vendors::class;
 
-    protected static ?string $label = 'فرۆشیار';
+    protected static ?string $label = 'بائع';
 
-    protected static ?string $navigationGroup = 'ڕێکخستنەکان';
+    protected static ?string $navigationGroup = 'إعدادات';
 
     protected static ?string $navigationIcon = 'fas-users';
 
     protected static ?string $activeNavigationIcon = 'fas-users-between-lines';
 
-    protected static ?string $navigationLabel = 'فرۆشیارەکان';
-    protected static ?string $pluralLabel = 'فرۆشیارەکان';
+    protected static ?string $navigationLabel = "البائعون";
+    protected static ?string $pluralLabel = "البائعون";
 
-    protected static ?string $pluralModelLabel = 'فرۆشیارەکان';
+    protected static ?string $pluralModelLabel = "البائعون";
 
 
     protected static ?int $navigationSort = 42;
@@ -42,9 +42,9 @@ class VendorsResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'ناو' => $record->name,
-            'ژمارەی مۆبایل' => $record->phone,
-            'ناونیشان' => $record->address,
+            'اسم' => $record->name,
+            'رقم الهاتف' => $record->phone,
+            'عنوان' => $record->address,
         ];
     }
     public static function form(Form $form): Form
@@ -52,21 +52,21 @@ class VendorsResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->placeholder('ناو')
+                    ->placeholder('اسم')
                     ->suffixIcon('far-user')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
-                    ->placeholder('ژمارەی مۆبایل')
-                    ->label('ژمارەی مۆبایل')
+                    ->placeholder('رقم الهاتف')
+                    ->label('رقم الهاتف')
                     ->suffixIcon('fas-phone-volume')
                     ->tel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
-                    ->label('ناونیشان')
-                    ->placeholder('ناونیشان')
+                    ->label('عنوان')
+                    ->placeholder('عنوان')
                     ->suffixIcon('fas-location-crosshairs')
                     ->required()
                     ->maxLength(255),
@@ -80,13 +80,13 @@ class VendorsResource extends Resource
 
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
-                    ->label('ژمارەی مۆبایل')
+                    ->label('رقم الهاتف')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('address')
-                    ->label('ناونیشان')
+                    ->label('عنوان')
                     ->searchable(),
 
             ])
@@ -98,7 +98,7 @@ class VendorsResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     DeleteAction::make()
-                ])->label('کردارەکان')->button(),
+                ])->label('الإجراءات')->button(),
             ])
             ->bulkActions([
 

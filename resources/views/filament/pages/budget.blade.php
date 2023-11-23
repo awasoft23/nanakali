@@ -43,7 +43,7 @@
                 class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 dark:bg-custom-500 dark:hover:bg-custom-400 focus:ring-custom-500/50 dark:focus:ring-custom-400/50 fi-ac-btn-action"
                 type="button" onclick="window.print()">
                 <span class="fi-btn-label">
-                    چاپکردن
+                    الطباعة
                 </span>
             </button>
         </div>
@@ -52,10 +52,10 @@
         <div class=" flex justify-between items-center align-middle border-b-2"
             style="background: #2c3862;border-bottom:6px solid #475569">
             <div class="px-4 text-white font-bold   " style="font-size: 30pt">
-                نانــەکەلــی مــەڕمــەڕ
+                 مواد نانکلي
                 <div style="font-size: 16pt; font-weight: bold; margin:10px 0 ">
-                    بۆ مەڕمەڕی دەستکرد
-                </div>
+                    للمواد الصناعي
+                  </div>
             </div>
             <div class="bg-white">
                 <img src="{{ asset('logo.png') }}" style="width: 250px" alt="">
@@ -66,23 +66,24 @@
 
     <h1
         class="fi-header-heading text-2xl font-bold text-center tracking-center text-gray-950 dark:text-white sm:text-3xl">
-        پوختەی کۆمپانیا <span class="text-base">({{ now()->format('Y-m-d') }})</span>
+        میزانییة<span class="text-base">({{ now()->format('Y-m-d') }})</span>
     </h1>
     <hr class="my-4">
-    <h1 class="text-3xl font-bold text-center">سەروەت و داواکراوەکان</h1>
+    <h1 class="text-3xl font-bold text-center">موجودات والمطلوبات</h1>
     <div style="display: flex">
         <div style="width:50%" class="">
             <div style="background:#172554;color:white !important ;font-weight:bold"
                 class="py-2 text-center border px-2">
-                سەروەت
+                موجودات
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    قەرزی کڕیارەکان
+                    قروض العملاء
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     @php
                         $reqD += $data['CustomerDebts'] + $data['recivedMoney'] + $data['productsBalance'];
+                        $reqD += $data['avaliable'];
                         $reqI += 0;
                     @endphp
                     {{ number_format($data['CustomerDebts'], 2) }} $
@@ -91,7 +92,7 @@
 
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی پسولە واصلکراوەکان
+                    إجمالي الوصلات المستلمة
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['recivedMoney'], 2) }} $
@@ -99,7 +100,15 @@
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی کاڵاکان
+                    موجودات ثابتة
+                </div>
+                <div style="width:50%" class="py-2 border px-2">
+                    {{ number_format($data['avaliable'], 2) }} $
+                </div>
+            </div>
+            <div style="display: flex;">
+                <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
+                    إجمالي المواد
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['productsBalance'], 2) }} $
@@ -114,7 +123,7 @@
                         @endphp
                         <div style="display: flex;">
                             <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                                قەرزی {{ $partner->partnersName }}
+                                محسوبات الشخصیة {{ $partner->partnersName }}
                             </div>
                             <div style="width:50%" class="py-2 border px-2">
                                 {{ number_format(-1 * $partner->balance, 2) }} $
@@ -128,7 +137,7 @@
                         <div style="display: flex;">
                             <div style="background: #475569;color:white;font-weight:bold:bold;width:50%"
                                 class="py-2 px-2 border">
-                                قەرزی {{ $partner->partnersName }}
+                                محسوبات الشخصیة {{ $partner->partnersName }}
                             </div>
                             <div style="width:50%" class="py-2 border px-2">
                                 {{ number_format(-1 * $partner->balance, 0) }} د.ع
@@ -143,11 +152,11 @@
         <div style="width:50%" class="">
             <div style="background:#172554;color:white !important ;font-weight:bold"
                 class="py-2 text-center border px-2">
-                داواکراوەکان
+                مطلوبات
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    قەرزی فرۆشیارەکان
+                    ائتمان البائعين
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     @php
@@ -159,7 +168,7 @@
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی پسولە واصلکراوەکان
+                    إجمالي الوصلات المستلمة
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['sendedMoney'], 2) }} $
@@ -174,7 +183,7 @@
                         @endphp
                         <div style="display: flex;">
                             <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                                داهاتی {{ $partner->partnersName }}
+                                راس المال {{ $partner->partnersName }}
                             </div>
                             <div style="width:50%" class="py-2 border px-2">
                                 {{ number_format($partner->balance, 2) }} $
@@ -188,7 +197,7 @@
                         <div style="display: flex;">
                             <div style="background: #475569;color:white;font-weight:bold:bold;width:50%"
                                 class="py-2 px-2 border">
-                                داهاتی {{ $partner->partnersName }}
+                                راس المال {{ $partner->partnersName }}
                             </div>
                             <div style="width:50%" class="py-2 border px-2">
                                 {{ number_format($partner->balance, 0) }} د.ع
@@ -200,7 +209,7 @@
             @foreach ($data['expenses'] as $expenses)
                 <div style="display: flex;">
                     <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                        خەرجییەکان
+                        المصاریف
                     </div>
                     <div style="width:50%" class="py-2 border px-2">
                         @if ($expenses->priceType == 0)
@@ -227,22 +236,22 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دۆلاری ئەمریکی
-                </div>
+                    مجموع دولار الامریکی
+                               </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD, 2) }} $ </div>
             </div>
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دیناری عێراقی
+                    مجموع الدينار العراقي
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqI, 0) }} د.ع</div>
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 border px-2">
-                    نرخی دۆلار
+                    سعر الدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['dollarPrice'], 2) }} د.ع
@@ -251,7 +260,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی بەدۆلار
+                    المجموع بالدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD + $reqI / $data['dollarPrice'], 2) }} $</div>
@@ -259,7 +268,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:100%"
                     class="py-2 px-2 border text-left">
-                    داهات
+                    ربح
                 </div>
             </div>
         </div>
@@ -267,7 +276,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دۆلاری ئەمریکی
+                    مجموع دولار الامریکی
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD1, 2) }} $ </div>
@@ -275,14 +284,14 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دیناری عێراقی
+                    مجموع الدينار العراقي
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqI1, 0) }} د.ع</div>
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 border px-2">
-                    نرخی دۆلار
+                    سعر الدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['dollarPrice'], 2) }} د.ع
@@ -291,7 +300,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی بەدۆلار
+                    المجموع بالدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD1 + $reqI1 / $data['dollarPrice'], 2) }} $</div>
@@ -311,11 +320,11 @@
     <div class="my-10" style="margin: 50px">
     </div>
 
-    <h1 class="text-3xl font-bold text-center">داهاتی خاوەن پشکەکان</h1>
+    <h1 class="text-3xl font-bold text-center">راس المال الشرکاء</h1>
     <div style="">
         @php
             $dt = [];
-            $profit = ($reqD + $reqI / $data['dollarPrice'] - ($reqD1 + $reqI1 / $data['dollarPrice'])) / 3;
+            $profit = ($reqD + $reqI / $data['dollarPrice'] - ($reqD1 + $reqI1 / $data['dollarPrice'])) /2;
         @endphp
         @foreach ($data['partnersBalance'] as $partner)
             @if ($partner->priceType == '$')
@@ -331,16 +340,16 @@
         <div style="display: flex;">
             <div class="border p-2"
                 style="display: flex; width:25%;background:#213780;color:white !important ;font-weight:bold">
-                خاوەن پشک
+                الشرکاء
             </div>
             <div class="border p-2" style="display: flex; width:25%;background:#213780;color:white">
-                داهاتی پێشوو
+                الراس المال السابق
             </div>
             <div class="border p-2" style="display: flex; width:25%;background:#213780;color:white">
-                کۆی گشتی داهات
+                إجمالي الراس المال
             </div>
             <div class="border p-2" style="display: flex; width:25%;background:#213780;color:white">
-                داهاتی ئێستا
+                الراس المال الحالي
             </div>
         </div>
         @foreach ($dt as $dtt)
@@ -386,20 +395,23 @@
         $reqD1 = 0;
         $reqI1 = 0;
     @endphp
-    <h1 class="text-3xl font-bold text-center">میزانییەی کۆمپانیا</h1>
+    <h1 class="text-3xl font-bold text-center">
+        ميزانية الشركة
+    </h1>
     <div style="display: flex">
         <div style="width:50%" class="">
             <div style="background:#172554;color:white !important ;font-weight:bold"
                 class="py-2 text-center border px-2">
-                سەروەت
+                موجودات
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    قەرزی کڕیارەکان
+                    قروض العملاء
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     @php
                         $reqD += $data['CustomerDebts'] + $data['recivedMoney'] + $data['productsBalance'];
+                        $reqD+=$data['avaliable'];
                         $reqI += 0;
                     @endphp
                     {{ number_format($data['CustomerDebts'], 2) }} $
@@ -407,7 +419,15 @@
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی پسولە واصلکراوەکان
+                    موجودات ثابتة
+                </div>
+                <div style="width:50%" class="py-2 border px-2">
+                    {{ number_format($data['avaliable'], 2) }} $
+                </div>
+            </div>
+            <div style="display: flex;">
+                <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
+                    إجمالي الوصلات المستلمة
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['recivedMoney'], 2) }} $
@@ -415,7 +435,7 @@
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی کاڵاکان
+                    إجمالي المواد
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['productsBalance'], 2) }} $
@@ -429,7 +449,7 @@
                     @endphp
                     <div style="display: flex;">
                         <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                            قەرزی {{ $dtt['name'] }}
+                            محسوبات شخصیة {{ $dtt['name'] }}
                         </div>
                         <div style="width:50%" class="py-2 border px-2">
                             {{ number_format(-1 * $dtt['balance'], 2) }} $
@@ -444,11 +464,11 @@
         <div style="width:50%" class="">
             <div style="background:#172554;color:white !important ;font-weight:bold"
                 class="py-2 text-center border px-2">
-                داواکراوەکان
+                مطلوبات
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    قەرزی فرۆشیارەکان
+                    ائتمان البائعين
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     @php
@@ -460,7 +480,7 @@
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی پسولە واصلکراوەکان
+                    إجمالي الوصلات المستلمة
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['sendedMoney'], 2) }} $
@@ -474,7 +494,7 @@
                     @endphp
                     <div style="display: flex;">
                         <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                            داهاتی {{ $dtt['name'] }}
+                            راس المال {{ $dtt['name'] }}
                         </div>
                         <div style="width:50%" class="py-2 border px-2">
                             {{ number_format($dtt['balance'], 2) }} $
@@ -485,7 +505,7 @@
             @foreach ($data['expenses'] as $expenses)
                 <div style="display: flex;">
                     <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                        خەرجییەکان
+                        المصاریف
                     </div>
                     <div style="width:50%" class="py-2 border px-2">
                         @if ($expenses->priceType == 0)
@@ -514,7 +534,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دۆلاری ئەمریکی
+                    مجموع دولار الامریکی
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD, 2) }} $ </div>
@@ -522,14 +542,14 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دیناری عێراقی
+                    مجموع الدينار العراقي
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqI, 0) }} د.ع</div>
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 border px-2">
-                    نرخی دۆلار
+                    سعر الدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['dollarPrice'], 2) }} د.ع
@@ -538,7 +558,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی بەدۆلار
+                    المجموع بالدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD + $reqI / $data['dollarPrice'], 2) }} $</div>
@@ -548,7 +568,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دۆلاری ئەمریکی
+                    مجموع دولار الامریکی
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD1, 2) }} $ </div>
@@ -556,14 +576,14 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی دیناری عێراقی
+                    مجموع الدينار العراقي
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqI1, 0) }} د.ع</div>
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 border px-2">
-                    نرخی دۆلار
+                    سعر الدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['dollarPrice'], 2) }} د.ع
@@ -572,7 +592,7 @@
             <div style="display: flex;">
                 <div style="background:#172554;color:white !important ;font-weight:bold;width:50%"
                     class="py-2 px-2 border">
-                    کۆی گشتی بەدۆلار
+                    المجموع بالدولار
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($reqD1 + $reqI1 / $data['dollarPrice'], 2) }} $</div>

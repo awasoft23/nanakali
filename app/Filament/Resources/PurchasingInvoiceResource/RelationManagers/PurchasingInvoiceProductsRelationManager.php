@@ -21,8 +21,8 @@ use Illuminate\Support\Facades\DB;
 class PurchasingInvoiceProductsRelationManager extends RelationManager
 {
     protected static string $relationship = 'PurchasingInvoiceProducts';
-    protected static ?string $modelLabel = 'کاڵا';
-    protected static ?string $title = 'کاڵاکان';
+    protected static ?string $modelLabel = 'المواد';
+    protected static ?string $title = 'المواد';
 
     public function form(Form $form): Form
     {
@@ -32,36 +32,36 @@ class PurchasingInvoiceProductsRelationManager extends RelationManager
                     ->relationship('PurchaseProducts', 'code')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
-                            ->label('ناو')
-                            ->placeholder('ناو')
+                            ->label('اسم')
+                            ->placeholder('اسم')
                             ->suffixIcon('fas-box-archive')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('code')
-                            ->label('کۆدی کاڵا')
-                            ->placeholder('کۆدی کاڵا')
+                            ->label('كود المواد')
+                            ->placeholder('كود المواد')
                             ->suffixIcon('fas-barcode')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('unit')
-                            ->label('یەکە')
-                            ->placeholder('یەکە')
+                            ->label('متر')
+                            ->placeholder('متر')
                             ->suffixIcon('fas-notes-medical')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('purchasePricw')
-                            ->label('نرخی کڕین')
-                            ->placeholder('نرخی کڕین')
+                            ->label('سعر الشراء')
+                            ->placeholder('سعر الشراء')
                             ->suffix('$')
                             ->required()
                             ->maxLength(255),
                     ])
-                    ->label('کاڵا')
+                    ->label('المواد')
                     ->searchable()
                     ->live()
                     ->required()
                     ->options(
-                        PurchaseProducts::select('id', DB::raw('CONCAT("ناو: ", name , " - کۆد: ", code, " - نرخ: ",purchasePricw, "$") as productName'))->pluck('productName', 'id')
+                        PurchaseProducts::select('id', DB::raw('CONCAT("اسم: ", name , " - کود: ", code, " - سعر: ",purchasePricw, "$") as productName'))->pluck('productName', 'id')
                     )
                     ->afterStateUpdated(function (Set $set, $state) {
                         $set('purchase_price', PurchaseProducts::find($state) ? PurchaseProducts::find($state)->purchasePricw : 0);
@@ -70,13 +70,13 @@ class PurchasingInvoiceProductsRelationManager extends RelationManager
                 TextInput::make('qty')
                     ->required()
                     ->disabled(fn(Get $get) => !PurchaseProducts::find($get('purchase_products_id')))
-                    ->label(fn(Get $get) => PurchaseProducts::find($get('purchase_products_id')) ? PurchaseProducts::find($get('purchase_products_id'))->unit : 'یەکە')
+                    ->label(fn(Get $get) => PurchaseProducts::find($get('purchase_products_id')) ? PurchaseProducts::find($get('purchase_products_id'))->unit : 'متر')
                     ->suffix(fn(Get $get) => PurchaseProducts::find($get('purchase_products_id')) ? PurchaseProducts::find($get('purchase_products_id'))->unit : null),
                 TextInput::make('purchase_price')
                     ->required()
                     ->disabled(fn(Get $get) => !PurchaseProducts::find($get('purchase_products_id')))
-                    ->numeric()
-                    ->label('نرخ')
+                    ->numeric(2)
+                    ->label('سعر')
                     ->suffix('$'),
             ]);
     }
@@ -85,16 +85,16 @@ class PurchasingInvoiceProductsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('PurchaseProducts.code')->label('کۆدی کاڵا')->searchable(),
-                TextColumn::make('PurchaseProducts.name')->label('ناوی کاڵا')->searchable(),
-                TextColumn::make('purchase_price')->label('نرخی کڕین')->prefix(' $ ')->numeric(2),
-                TextColumn::make('qty')->label('ژمارە')
+                TextColumn::make('PurchaseProducts.code')->label('كود المواد')->searchable(),
+                TextColumn::make('PurchaseProducts.name')->label('اسم المواد')->searchable(),
+                TextColumn::make('purchase_price')->label('سعر الشراء')->prefix(' $ ')->numeric(2),
+                TextColumn::make('qty')->label('رقم')
                     ->formatStateUsing(fn($state, PurchasingInvoiceProducts $record) => number_format($state, 0) . ' - ' . PurchaseProducts::find($record->purchase_products_id)->unit),
                 TextColumn::make('total')
-                    ->label('کۆی گشتی')
+                    ->label('مجموع')
                     ->formatStateUsing(fn(PurchasingInvoiceProducts $record) => '$ ' . number_format($record->qty * $record->purchase_price, 2))
                     ->summarize(
-                        Summarizer::make()->label('کۆی گشتی')->using(
+                        Summarizer::make()->label('مجموع')->using(
                             function (Builder $query) {
                                 return $query->sum(DB::raw('(qty * purchase_price)'));
                             }

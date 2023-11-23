@@ -23,20 +23,20 @@ use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 class UsedProductsResource extends Resource
 {
     protected static ?string $model = UsedProducts::class;
-    protected static ?string $label = 'بەکارهاتوو';
+    protected static ?string $label = 'مستخدم';
 
-    protected static ?string $navigationGroup = 'کڕین';
+    protected static ?string $navigationGroup = 'شراء';
 
     protected static ?string $navigationIcon = 'far-circle-check';
 
     protected static ?string $activeNavigationIcon = 'fas-circle-check';
 
-    protected static ?string $navigationLabel = 'کاڵا بەکارهاتووەکان';
-    protected static ?string $pluralLabel = 'کاڵا بەکارهاتووەکان';
+    protected static ?string $navigationLabel = "المواد المستهلكة";
+    protected static ?string $pluralLabel = "المواد المستهلكة";
 
-    protected static ?string $pluralModelLabel = 'کاڵا بەکارهاتووەکان';
+    protected static ?string $pluralModelLabel = "المواد المستهلكة";
 
-    protected static ?string $recordTitleAttribute = 'کاڵا بەکارهاتووەکان';
+    protected static ?string $recordTitleAttribute = "المواد المستهلكة";
 
     protected static ?int $navigationSort = 30;
 
@@ -50,36 +50,36 @@ class UsedProductsResource extends Resource
                     ->relationship('PurchaseProducts', 'code')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
-                            ->label('ناو')
-                            ->placeholder('ناو')
+                            ->label('اسم')
+                            ->placeholder('اسم')
                             ->suffixIcon('fas-box-archive')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('code')
-                            ->label('کۆدی کاڵا')
-                            ->placeholder('کۆدی کاڵا')
+                            ->label('كود المواد')
+                            ->placeholder('كود المواد')
                             ->suffixIcon('fas-barcode')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('unit')
-                            ->label('یەکە')
-                            ->placeholder('یەکە')
+                            ->label('متر')
+                            ->placeholder('متر')
                             ->suffixIcon('fas-notes-medical')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('purchasePricw')
-                            ->label('نرخی کڕین')
-                            ->placeholder('نرخی کڕین')
+                            ->label('سعر الشراء')
+                            ->placeholder('سعر الشراء')
                             ->suffix('$')
                             ->required()
                             ->maxLength(255),
                     ])
-                    ->label('کاڵا')
+                    ->label('المواد')
                     ->searchable()
                     ->live()
                     ->required()
                     ->options(
-                        PurchaseProducts::select('id', DB::raw('CONCAT("ناو: ", name , " - کۆد: ", code, " - نرخ: ",purchasePricw, "$") as productName'))->pluck('productName', 'id')
+                        PurchaseProducts::select('id', DB::raw('CONCAT("اسم: ", name , " - کود: ", code, " - سعر: ",purchasePricw, "$") as productName'))->pluck('productName', 'id')
                     )
                     ->afterStateUpdated(function (Set $set, $state) {
                         $set('purchase_price', PurchaseProducts::find($state) ? PurchaseProducts::find($state)->purchasePricw : 0);
@@ -88,7 +88,7 @@ class UsedProductsResource extends Resource
                 TextInput::make('qty')
                     ->required()
                     ->disabled(fn(Get $get) => !PurchaseProducts::find($get('purchase_products_id')))
-                    ->label(fn(Get $get) => PurchaseProducts::find($get('purchase_products_id')) ? PurchaseProducts::find($get('purchase_products_id'))->unit : 'یەکە')
+                    ->label(fn(Get $get) => PurchaseProducts::find($get('purchase_products_id')) ? PurchaseProducts::find($get('purchase_products_id'))->unit : 'متر')
                     ->suffix(fn(Get $get) => PurchaseProducts::find($get('purchase_products_id')) ? PurchaseProducts::find($get('purchase_products_id'))->unit : null),
             ]);
     }
@@ -99,17 +99,17 @@ class UsedProductsResource extends Resource
             ->modifyQueryUsing(fn(\Illuminate\Database\Eloquent\Builder $query) => $query->orderBy('id', 'desc'))
 
             ->columns([
-                TextColumn::make('PurchaseProducts.code')->label('کۆدی کاڵا')->searchable(),
-                TextColumn::make('PurchaseProducts.name')->label('ناوی کاڵا')->searchable(),
-                TextColumn::make('qty')->label('ژمارە')
+                TextColumn::make('PurchaseProducts.code')->label('كود المواد')->searchable(),
+                TextColumn::make('PurchaseProducts.name')->label('اسم المواد')->searchable(),
+                TextColumn::make('qty')->label('رقم')
                     ->formatStateUsing(fn($state, UsedProducts $record) => number_format($state, 0) . ' - ' . PurchaseProducts::find($record->purchase_products_id)->unit),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('کات و بەروار')
+                    ->label('الوقت و التاريخ')
                     ->dateTime('d/m/y H:i:s')
                     ->sortable()
             ])
             ->filters([
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ])
             ->actions([
                 DeleteAction::make()

@@ -54,7 +54,7 @@
                 class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 dark:bg-custom-500 dark:hover:bg-custom-400 focus:ring-custom-500/50 dark:focus:ring-custom-400/50 fi-ac-btn-action"
                 type="button" onclick="window.print()">
                 <span class="fi-btn-label">
-                    چاپکردن
+                    الطباعة
                 </span>
             </button>
         </div>
@@ -63,9 +63,9 @@
         <div class=" flex justify-between items-center align-middle border-b-2"
             style="background: #2c3862;border-bottom:6px solid #475569">
             <div class="px-4 text-white font-bold   " style="font-size: 30pt">
-                نانــەکەلــی مــەڕمــەڕ
+                مواد نانکلي
                 <div style="font-size: 16pt; font-weight: bold; margin:10px 0 ">
-                    بۆ مەڕمەڕی دەستکرد
+                    للمواد الصناعي
                 </div>
             </div>
             <div class="bg-white">
@@ -77,7 +77,7 @@
 
     <h1
         class="fi-header-heading text-2xl font-bold text-center tracking-center text-gray-950 dark:text-white sm:text-3xl">
-        پوختەی قاصە <span class="text-base">({{ now()->format('Y-m-d') }})</span>
+        ملخص المربع<span class="text-base">({{ now()->format('Y-m-d') }})</span>
     </h1>
     <hr class="my-4">
 
@@ -85,11 +85,11 @@
         <div style="width:50%" class="">
             <div style="background:#172554;color:white !important ;font-weight:bold"
                 class="py-2 text-center border px-2">
-                هاتن
+                يأتي
             </div>
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی پسولەکانی وەرگرتن
+                    إجمالي الوصلات
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format($data['recivedMoney'], 2) }} $
@@ -110,7 +110,7 @@
                         @endphp
                         <div style="display: flex;">
                             <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                                لەلایەن {{ $partner->partnersName }}
+                                بواسطة {{ $partner->partnersName }}
                             </div>
                             <div style="width:50%" class="py-2 border px-2">
                                 {{ number_format($partner->balance, 2) }} $
@@ -124,7 +124,7 @@
                         <div style="display: flex;">
                             <div style="background: #475569;color:white;font-weight:bold:bold;width:50%"
                                 class="py-2 px-2 border">
-                                لەلایەن {{ $partner->partnersName }}
+                                بواسطة {{ $partner->partnersName }}
                             </div>
                             <div style="width:50%" class="py-2 border px-2">
                                 {{ number_format(round($partner->balance / 250) * 250, 0) }} د.ع
@@ -135,7 +135,7 @@
             @endforeach
             <div style="display: flex;">
                 <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                    کۆی گشتی پسولەکانی وەرگرتن
+                    إجمالي الوصلات
                 </div>
                 <div style="width:50%" class="py-2 border px-2">
                     {{ number_format(round($data['recivedMoneyDinar'] / 250) * 250, 0) }} د.ع
@@ -202,7 +202,7 @@
             @foreach ($data['expenses'] as $expenses)
                 <div style="display: flex;">
                     <div style="background: #475569;color:white;width:50%" class="py-2 px-2 border">
-                        خەرجییەکان
+                        المصاریف
                     </div>
                     <div style="width:50%" class="py-2 border px-2">
                         @if ($expenses->priceType == 0)

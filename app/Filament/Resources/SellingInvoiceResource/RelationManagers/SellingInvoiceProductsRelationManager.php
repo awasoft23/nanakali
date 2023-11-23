@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\DB;
 class SellingInvoiceProductsRelationManager extends RelationManager
 {
     protected static string $relationship = 'SellingInvoiceProducts';
-    protected static ?string $modelLabel = 'کاڵا';
-    protected static ?string $title = 'کاڵاکان';
+    protected static ?string $modelLabel = 'المواد';
+    protected static ?string $title = 'المواد';
 
     public function form(Form $form): Form
     {
@@ -29,53 +29,62 @@ class SellingInvoiceProductsRelationManager extends RelationManager
         return $form
             ->schema([
                 Select::make('selling_products_id')
-                    ->placeholder('کاڵا')
-                    ->label('کاڵا')
+                    ->placeholder('المواد')
+                    ->label('المواد')
                     ->required()
                     ->relationship('SellingProducts', 'id')
                     ->createOptionForm([
                         TextInput::make('name')
-                            ->placeholder('ناوی کاڵا')
-                            ->label('ناوی کاڵا')
+                            ->placeholder('اسم المواد')
+                            ->label('اسم المواد')
                             ->suffixIcon('fas-box-archive')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('code')
-                            ->placeholder('کۆدی کاڵا')
-                            ->label('کۆدی کاڵا')
+                            ->placeholder('كود المواد')
+                            ->label('كود المواد')
                             ->required()
                             ->suffixIcon('fas-barcode')
                             ->maxLength(255),
                         TextInput::make('unit')
-                            ->placeholder('یەکە')
-                            ->label('یەکە')
+                            ->placeholder('متر')
+                            ->label('متر')
                             ->suffixIcon('fas-notes-medical')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('salePrice')
-                            ->placeholder('نرخی فرۆشتن')
-                            ->label('نرخی فرۆشتن')
+                            ->placeholder('سعر البيع')
+                            ->label('سعر البيع')
                             ->required()
                             ->suffix('$')
                             ->maxLength(255),
                     ])
-                    ->options(SellingProducts::select('id', DB::raw('CONCAT("جۆری مەڕمەڕ: ", name , " - جۆری قالب: ", code," - کۆدی ڕەنگ: ", colorCofe, " - نرخ: ",salePrice, "$") as productName'))
+                    ->options(SellingProducts::select('id', DB::raw('CONCAT("نوع المواد: ", name , " - نوع القالب: ", code, " - سعر: ",salePrice, "$") as productName'))
                         ->pluck('productName', 'id'))
                     ->live()
                     ->afterStateUpdated(fn($state, Set $set) => SellingProducts::find($state) ? $set('sallingPrice', SellingProducts::find($state)->salePrice) : $set('sallingPrice', 0))
                     ->searchable()->columnSpanFull(),
+                Select::make('colorCode')
+                ->label('اللون')
+                ->options(function(){
+                    $dd=[];
+                    for($i=1;$i<=100;$i++){
+                        array_push($dd,$i);
+                    }
+                    return $dd;
+                })->searchable(),
                 TextInput::make('qty')
                     ->required()
-                    ->placeholder(fn(Get $get) => SellingProducts::find($get('selling_invoices_id')) ? SellingProducts::find($get('selling_invoices_id'))->unit : 'دانە')
-                    ->label(fn(Get $get) => SellingProducts::find($get('selling_invoices_id')) ? SellingProducts::find($get('selling_invoices_id'))->unit : 'دانە')
-                    ->suffix(fn(Get $get) => SellingProducts::find($get('selling_invoices_id')) ? SellingProducts::find($get('selling_invoices_id'))->unit : 'دانە')
-                    ->numeric(),
+                    ->placeholder(fn(Get $get) => SellingProducts::find($get('selling_invoices_id')) ? SellingProducts::find($get('selling_invoices_id'))->unit : 'عدد')
+                    ->label(fn(Get $get) => SellingProducts::find($get('selling_invoices_id')) ? SellingProducts::find($get('selling_invoices_id'))->unit : 'عدد')
+                    ->suffix(fn(Get $get) => SellingProducts::find($get('selling_invoices_id')) ? SellingProducts::find($get('selling_invoices_id'))->unit : 'عدد')
+                    ->numeric(2),
                 TextInput::make('sallingPrice')
-                    ->placeholder('نرخ')
-                    ->label('نرخ')
+                    ->placeholder('سعر')
+                    ->label('سعر')
                     ->required()
                     ->suffix('$')
-                    ->numeric()
+                    ->numeric(2)
 
             ]);
     }
@@ -86,19 +95,22 @@ class SellingInvoiceProductsRelationManager extends RelationManager
 
             ->columns([
                 TextColumn::make('SellingProducts.name')
-                    ->label('ناوی کاڵا')
+                    ->label('اسم المواد')
                     ->searchable(),
                 TextColumn::make('SellingProducts.code')
-                    ->label('کۆدی کاڵا'),
+                    ->label('كود المواد'),
+                TextColumn::make('colorCode')
+                    ->searchable()
+                    ->label('اللون'),
                 TextColumn::make('sallingPrice')
                     ->searchable()
                     ->suffix(' $ ')
-                    ->label('نرخ'),
+                    ->label('سعر'),
                 TextColumn::make('qty')
                     ->searchable()
-                    ->label('بڕ'),
+                    ->label('کمیة'),
                 TextColumn::make('total')
-                    ->label('کۆی گشتی')
+                    ->label('مجموع')
                     ->formatStateUsing(fn($record) => '$ ' . number_format($record->qty * $record->sallingPrice, 2))
                     ->summarize(
                         [

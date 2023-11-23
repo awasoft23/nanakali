@@ -13,10 +13,8 @@ class PartnersOverview extends BaseWidget
         return [
             Stat::make('$', number_format(Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '$')->where('type', 0)->sum('amount') - Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '$')->where('type', 1)->sum('amount'), 2))->description('صبر محمد مولود'),
             Stat::make('$', number_format(Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '$')->where('type', 0)->sum('amount') - Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '$')->where('type', 1)->sum('amount'), 2))->description('ئەیاد عبدولشریف'),
-            Stat::make('$', number_format(Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '$')->where('type', 0)->sum('amount') - Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '$')->where('type', 1)->sum('amount'), 2))->description('ئەشقی ئەحمەد ئیبراهیم'),
             Stat::make('د.ع', number_format(Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '!=', '$')->where('type', 0)->sum('amount') - Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '!=', '$')->where('type', 1)->sum('amount'), 0))->description('صبر محمد مولود'),
             Stat::make('د.ع', number_format(Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '!=', '$')->where('type', 0)->sum('amount') - Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '!=', '$')->where('type', 1)->sum('amount'), 0))->description('ئەیاد عبدولشریف'),
-            Stat::make('د.ع', number_format(Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '!=', '$')->where('type', 0)->sum('amount') - Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '!=', '$')->where('type', 1)->sum('amount'), 0))->description('ئەشقی ئەحمەد ئیبراهیم'),
 
             Stat::make(
                 '$',
@@ -25,25 +23,21 @@ class PartnersOverview extends BaseWidget
                     - Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '$')->where('type', 1)->sum('amount')
                     + Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '$')->where('type', 0)->sum('amount')
                     - Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '$')->where('type', 1)->sum('amount')
-                    + Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '$')->where('type', 0)->sum('amount')
-                    - Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '$')->where('type', 1)->sum('amount')
                     ,
                     2
                 )
-            )->description('کۆی گشتی'),
+            )->description('مجموع'),
             Stat::make(
                 'د.ع',
                 number_format(
-                    Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '!=', '$')->where('type', 0)->sum('amount')
-                    - Reciepts::where('partnersName', 'ئەشقی ئەحمەد ئیبراهیم')->where('priceType', '!=', '$')->where('type', 1)->sum('amount')
-                    + Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '!=', '$')->where('type', 0)->sum('amount')
+                     Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '!=', '$')->where('type', 0)->sum('amount')
                     - Reciepts::where('partnersName', 'صبر محمد مولود')->where('priceType', '!=', '$')->where('type', 1)->sum('amount')
                     + Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '!=', '$')->where('type', 0)->sum('amount')
                     - Reciepts::where('partnersName', 'ئەیاد عبدولشریف')->where('priceType', '!=', '$')->where('type', 1)->sum('amount')
                     ,
                     0
                 )
-            )->description('کۆی گشتی'),
+            )->description('مجموع'),
 
 
         ];

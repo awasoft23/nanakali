@@ -63,9 +63,7 @@
         <div style="padding: 20px">
             <div class="mt-1  grid grid-cols-3 items-center align-middle ">
                 <div class="text-lg font-bold">
-                    <div>
-                        ئەشقی: 3343 793 0750
-                    </div>
+
                     <div class="mt-1">
                         ئەیاد : 6427 755 0750
                     </div>
@@ -75,7 +73,7 @@
                     <b>پسولەی پارەدان</b>
                 </div>
                 <div class="text-left">
-                    <b>پەروار: </b> {{ $data->created_at->format('d/m/Y') }}
+                    <b>بەروار: </b> {{ $data->created_at->format('d/m/Y') }}
                 </div>
             </div>
             <hr class="my-2">
@@ -113,7 +111,7 @@
                     بەنوسین
                 </td>
                 <td colspan="3" class="border p-2 ">
-                    <span id="kurdishText"></span> {{ $data->priceType == 0 ? 'دۆلاری ئەمریکی' : 'دیناری عێراقی' }}.
+                    <span id="kurdishText"></span> {{ $data->priceType == 0 ? 'الدولار الأمريكي' : 'الدينار العراقي' }}.
                 </td>
             </tr>
             <tr class="border">

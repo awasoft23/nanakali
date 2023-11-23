@@ -24,19 +24,19 @@ class ExpensesOverview extends BaseWidget
         $endDate = Carbon::now()->endOfMonth();
         return [
             Stat::make('د.ع ', number_format(Expenses::where('priceType', 1)->sum('amount'), 0))
-                ->description('کۆی گشتی خەرجییەکان')
+                ->description('المصروفات الكلية')
                 ->color('danger')
                 ->descriptionIcon('fas-coins'),
             Stat::make('$ ', number_format(Expenses::where('priceType', 0)->sum('amount'), 2))
-                ->description('کۆی گشتی خەرجییەکان')
+                ->description('المصروفات الكلية')
                 ->descriptionIcon('fas-hand-holding-dollar')
                 ->color('danger'),
             Stat::make('د.ع ', number_format(Expenses::where('priceType', 1)->whereBetween('created_at', [$startDate, $endDate])->sum('amount'), 0))
-                ->description('کۆی گشتی خەرجییەکان ئەم مانگە')
+                ->description("إجمالي الالمصاریف هذا الشهر")
                 ->color('danger')
                 ->descriptionIcon('fas-coins'),
             Stat::make('$ ', number_format(Expenses::where('priceType', 0)->whereBetween('created_at', [$startDate, $endDate])->sum('amount'), 2))
-                ->description('کۆی گشتی خەرجییەکان ئەم مانگە')
+                ->description("إجمالي الالمصاریف هذا الشهر")
                 ->descriptionIcon('fas-hand-holding-dollar')
                 ->color('danger'),
 

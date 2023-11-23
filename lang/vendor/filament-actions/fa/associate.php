@@ -35,7 +35,7 @@ return [
         'notifications' => [
 
             'associated' => [
-                'title' => 'مرتبط شد',
+                'title' => 'راتبط شد',
             ],
 
         ],

@@ -18,8 +18,8 @@ class EmployeesRport extends Page implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
     protected static ?string $navigationIcon = 'fas-users-viewfinder';
-    protected static ?string $title = 'ڕاپۆرتی فەرمانبەرەکان';
-    protected static ?string $navigationGroup = 'ڕاپۆرتەکان';
+    protected static ?string $title ='تقرير الموظف';
+    protected static ?string $navigationGroup = 'تقاریر';
     protected static ?int $navigationSort = 50;
     public function table(Table $table): Table
     {
@@ -28,27 +28,27 @@ class EmployeesRport extends Page implements HasForms, HasTable
             ->query(Employees::query())
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('ناو'),
+                    ->label('اسم'),
                 Tables\Columns\TextColumn::make('phoneNumber')
-                    ->label('ژمارەی مۆبایل')
+                    ->label('رقم الهاتف')
                     ->copyable(),
                 Tables\Columns\TextColumn::make('IDCardNumber')
-                    ->label('ژمارەی ناسنامە'),
+                    ->label('رقم الهویة'),
                 Tables\Columns\TextColumn::make('DateOfWork')
-                    ->label('بەرواری دەستبەکاربوون')
+                    ->label('تاريخ البدء')
                     ->date('d/m/y'),
                 Tables\Columns\TextColumn::make('totalAbsense')
-                    ->label('کۆی غیابات')
+                    ->label('الغياب التام')
                     ->numeric(0)
                 ,
                 Tables\Columns\TextColumn::make('salary')
-                    ->label('مووچە')
+                    ->label('راتب')
                     ->formatStateUsing(fn($state, Employees $record) => $record->salaryType == 0 ? '$' . number_format($state, 2) : number_format($state, 0) . 'د.ع')
                     ->summarize([
-                        Summarizer::make()->label('کۆی گشتی دۆلاری ئەمریکی')->using(function (Builder $query) {
+                        Summarizer::make()->label('مجموع دولار الامریکی')->using(function (Builder $query) {
                             return $query->where('salaryType', 0)->sum('salary');
                         })->numeric(2),
-                        Summarizer::make()->label('کۆی گشتی دیناری عێراقی')->using(function (Builder $query) {
+                        Summarizer::make()->label('إجمالي الدينار العراقي')->using(function (Builder $query) {
                             return $query->where('salaryType', 1)->sum('salary');
                         })->numeric(0)
                     ]),

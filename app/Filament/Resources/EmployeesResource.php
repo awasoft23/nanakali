@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EmployeesResource\Pages;
 use App\Models\Employees;
 use App\Models\Expenses;
+use App\Models\Salary;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -28,19 +29,19 @@ class EmployeesResource extends Resource
 {
     protected static ?string $model = Employees::class;
 
-    protected static ?string $label = 'فەرمانبەر';
+    protected static ?string $label = 'موظف';
 
-    protected static ?string $navigationGroup = 'ڕێکخستنەکان';
+    protected static ?string $navigationGroup = 'إعدادات';
 
     protected static ?string $navigationIcon = 'far-circle-user';
 
     protected static ?string $activeNavigationIcon = 'fas-circle-user';
 
-    protected static ?string $navigationLabel = 'فەرمانبەرەکان';
-    protected static ?string $pluralLabel = 'فەرمانبەرەکان';
+    protected static ?string $navigationLabel = 'الموظفين';
+    protected static ?string $pluralLabel = 'الموظفين';
 
-    protected static ?string $pluralModelLabel = 'فەرمانبەرەکان';
-    protected static ?string $recordTitleAttribute = 'فەرمانبەرەکان';
+    protected static ?string $pluralModelLabel = 'الموظفين';
+    protected static ?string $recordTitleAttribute = 'الموظفين';
 
     protected static ?int $navigationSort = 45;
     public static function getGloballySearchableAttributes(): array
@@ -50,9 +51,9 @@ class EmployeesResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'ناو' => $record->name,
-            'ژمارەی مۆبایل' => $record->phoneNumber,
-            'ناونیشان' => $record->address,
+            'اسم' => $record->name,
+            'رقم الهاتف' => $record->phoneNumber,
+            'عنوان' => $record->address,
         ];
     }
     public static function form(Form $form): Form
@@ -60,46 +61,46 @@ class EmployeesResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->placeholder('ناوی سیانی')
+                    ->placeholder('اسم الثلاثي')
                     ->suffixIcon('far-user')
-                    ->label('ناوی سیانی')
+                    ->label('اسم الثلاثي')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phoneNumber')
-                    ->placeholder('ژمارەی مۆبایل')
-                    ->label('ژمارەی مۆبایل')
+                    ->placeholder('رقم الهاتف')
+                    ->label('رقم الهاتف')
                     ->suffixIcon('fas-phone-volume')
                     ->required()
                     ->tel()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
-                    ->label('ناونیشان')
-                    ->placeholder('ناونیشان')
+                    ->label('عنوان')
+                    ->placeholder('عنوان')
                     ->suffixIcon('fas-location-crosshairs')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('IDCardType')
-                    ->placeholder('جۆری ناسنامە')
-                    ->label('جۆری ناسنامە')
+                    ->placeholder('نوع الهوية')
+                    ->label('نوع الهوية')
                     ->suffixIcon('fas-address-card')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('IDCardNumber')
                     ->suffixIcon('fas-hashtag')
-                    ->placeholder('ژمارەی ناسنامە')
-                    ->label('ژمارەی ناسنامە')
+                    ->placeholder('رقم الهویة')
+                    ->label('رقم الهویة')
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('DOB')
-                    ->placeholder('بەرواری لەدایکبوون')
-                    ->label('بەرواری لەدایکبوون')
+                    ->placeholder('تاريخ الميلاد')
+                    ->label('تاريخ الميلاد')
                     ->suffixIcon('fas-calendar-days')
                     ->required(),
                 Forms\Components\DatePicker::make('DateOfWork')
-                    ->placeholder('بەرواری دەستبەکاربوون')
+                    ->placeholder('تاريخ البدء')
                     ->suffixIcon('fas-calendar-days')
-                    ->label('بەرواری دەستبەکاربوون')
+                    ->label('تاريخ البدء')
                     ->required(),
                 Select::make('salaryType')
-                    ->label('جۆری دراو')
+                    ->label('نوع العملة')
                     ->searchable()
                     ->suffixIcon('fas-coins')
                     ->default(0)
@@ -110,11 +111,11 @@ class EmployeesResource extends Resource
                         1 => 'د.ع'
                     ]),
                 Forms\Components\TextInput::make('salary')
-                    ->placeholder('مووچە')
-                    ->label('مووچە')
+                    ->placeholder('راتب')
+                    ->label('راتب')
                     ->suffix(fn(Get $get) => $get('salaryType') == 0 ? '$' : 'د.ع')
                     ->required()
-                    ->numeric(),
+                    ->numeric(2),
 
             ]);
     }
@@ -125,48 +126,48 @@ class EmployeesResource extends Resource
             ->modifyQueryUsing(fn(\Illuminate\Database\Eloquent\Builder $query) => $query->orderBy('lasSalary', 'asc'))
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('ناو')
+                    ->label('اسم')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phoneNumber')
-                    ->label('ژمارەی مۆبایل')
+                    ->label('رقم الهاتف')
                     ->copyable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('IDCardNumber')
-                    ->label('ژمارەی ناسنامە')
+                    ->label('رقم الهویة')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('DateOfWork')
-                    ->label('بەرواری دەستبەکاربوون')
+                    ->label('تاريخ البدء')
                     ->date('d/m/y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('monthAbsense')
-                    ->label('غیاباتی مانگانە')
+                    ->label('الغياب الشهري')
 
                     ->sortable(),
                 Tables\Columns\TextColumn::make('totalAbsense')
-                    ->label('کۆی غیابات')
+                    ->label('الغياب التام')
 
                     ->sortable(),
                 Tables\Columns\TextColumn::make('salary')
-                    ->label('مووچە')
+                    ->label('راتب')
                     ->formatStateUsing(fn($state, Employees $record) => $record->salaryType == 0 ? '$' . number_format($state, 2) : number_format($state, 0) . 'د.ع')
                     ->summarize([
-                        Summarizer::make()->label('کۆی گشتی دۆلاری ئەمریکی')->using(function (Builder $query) {
+                        Summarizer::make()->label('مجموع دولار الامریکی')->using(function (Builder $query) {
                             return $query->where('salaryType', 0)->sum('salary');
                         })->numeric(2),
-                        Summarizer::make()->label('کۆی گشتی دیناری عێراقی')->using(function (Builder $query) {
+                        Summarizer::make()->label('إجمالي الدينار العراقي')->using(function (Builder $query) {
                             return $query->where('salaryType', 1)->sum('salary');
                         })->numeric(0)
                     ])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('lasSalary')
-                    ->label('مووچەی داهاتوو')
+                    ->label('الراتب التالي')
                     ->color(fn($state) => Carbon::parse($state) < Carbon::now() ? Color::Red : Color::Green)
                     ->dateTime('d/m/y')
                     ->sortable(),
             ])
             ->filters([
-                DateRangeFilter::make('lasSalary')->label('مووچەی داهاتوو'),
-                DateRangeFilter::make('DateOfWork')->label('بەرواری دەستبەکاربوون'),
+                DateRangeFilter::make('lasSalary')->label('الراتب التالي'),
+                DateRangeFilter::make('DateOfWork')->label('تاريخ البدء'),
             ])
             ->actions([
                 ActionGroup::make([
@@ -175,30 +176,32 @@ class EmployeesResource extends Resource
                     Tables\Actions\DeleteAction::make(),
                     Action::make('salary')
                         ->hidden(auth()->user()->role == 1)
-                        ->label('مووچەدان')
+                        ->label('راتب')
                         ->icon('fas-hand-holding-dollar')
                         ->modalIcon('fas-hand-holding-dollar')
 
                         ->color('success')
                         ->form(function ($record, Form $form) {
                             return $form->schema([
-                                DatePicker::make('lasSalary')->label('کۆتا مووچەدان')->default($record->lasSalary)->required(),
-                                DatePicker::make('nextSalary')->label('مووچەی داهاتوو')->default(Carbon::parse($record->lasSalary)->addMonths(1))->required(),
-                                TextInput::make('slarys')->label('بڕی مووچە')->default($record->salary)->suffix($record->salaryType == 0 ? '$' : 'د.ع')->disabled(),
+                                DatePicker::make('lasSalary')->label('الدفعة الأخيرة')->default($record->lasSalary)->required(),
+                                DatePicker::make('nextSalary')->label('الراتب التالي')->default(Carbon::parse($record->lasSalary)->addMonths(1))->required(),
+                                TextInput::make('slarys')->label('مبلغ الراتب')->default($record->salary)->suffix($record->salaryType == 0 ? '$' : 'د.ع')->disabled(),
                                 TextInput::make('absense')->label('غیابات')->default($record->monthAbsense)->disabled(),
-                                TextInput::make('absenses')->label('لێبڕین')->default(number_format(($record->monthAbsense) * ($record->salary / 30), 2))->disabled(),
-                                TextInput::make('salary')->label('بڕی مووچە')->default(number_format($record->salary - (($record->monthAbsense) * ($record->salary / 30)), 2, '.', ''))->suffix($record->salaryType == 0 ? '$' : 'د.ع')->required()
+                                TextInput::make('absense11')->label('راتب مقدما')->default(Salary::where('employees_id',$record->id)->where('created_at','>=',$record->ss)->sum('amount'))->disabled(),
+                                TextInput::make('absenses')->label('المستقطع')->default(number_format(($record->monthAbsense) * ($record->salary / 30), 2))->disabled(),
+                                TextInput::make('salary')->label('مبلغ الراتب')->default(number_format($record->salary - ((($record->monthAbsense) * ($record->salary / 30)) + Salary::where('employees_id',$record->id)->where('created_at','>=',$record->ss)->sum('amount')), 2, '.', ''))->suffix($record->salaryType == 0 ? '$' : 'د.ع')->required()
                             ])->columns(2);
                         })->action(
                             function (array $data, $record) {
                                 $record->update([
                                     'lasSalary' => $data['nextSalary'],
-                                    'monthAbsense' => 0
+                                    'monthAbsense' => 0,
+                                    'ss'=>Carbon::now()
 
                                 ]);
                                 Expenses::create([
                                     'expenses_type_id' => 1,
-                                    'note' => 'مووچەی  فەرمانبەر : ' . $record->name,
+                                    'note' => 'راتب الموظف: ' . $record->name,
                                     'priceType' => $record->salaryType,
                                     'amount' => $data['salary'],
                                     'user_name' => auth()->user()->name,
@@ -207,10 +210,10 @@ class EmployeesResource extends Resource
                             }
                         )
                         ->requiresConfirmation()
-                        ->modalButton('مووچەدان')
-                        ->modalDescription('لەکاتی داگرتنی دوگمەی مووچەدان، مووچەی مانگی پێشووی ئەم کارمەندە، لە هەژماری ژمێریار کەمدەبێتەوە و وەک خەرجی هەژماردەکرێت، هەروەها غیاباتی ئەم مانگەی فەرمانبەر سفر دەبێتەوە')
+                        ->modalButton('راتب')
+                        ->modalDescription('عند الضغط على زر الدفع، سيتم خصم راتب الشهر السابق من حساب المحاسب واحتسابه كمصروف، وسيكون غياب الموظف هذا الشهر صفراً.')
 
-                ])->label('کردارەکان')->button()
+                ])->label('الإجراءات')->button()
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
 

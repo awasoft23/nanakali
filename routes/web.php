@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\CustomersReport;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,3 +13,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+
+Route::get('/customersReport/{id}/{from}/{to}',CustomersReport::class)->name('customersReport');

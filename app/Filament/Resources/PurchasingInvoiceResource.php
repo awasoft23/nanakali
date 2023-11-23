@@ -21,14 +21,14 @@ use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 class PurchasingInvoiceResource extends Resource
 {
     protected static ?string $model = PurchasingInvoice::class;
-    protected static ?string $label = 'کڕین';
-    protected static ?string $navigationGroup = 'کڕین';
+    protected static ?string $label = 'شراء';
+    protected static ?string $navigationGroup = 'شراء';
     protected static ?string $navigationIcon = 'fas-truck';
     protected static ?string $activeNavigationIcon = 'fas-truck-ramp-box';
-    protected static ?string $navigationLabel = 'کڕینی کاڵا';
-    protected static ?string $pluralLabel = 'کڕینی کاڵا';
-    protected static ?string $pluralModelLabel = 'کڕینی کاڵا';
-    protected static ?string $recordTitleAttribute = 'کڕینی کاڵا';
+    protected static ?string $navigationLabel = "شراء المواد";
+    protected static ?string $pluralLabel = "شراء المواد";
+    protected static ?string $pluralModelLabel = "شراء المواد";
+    protected static ?string $recordTitleAttribute = "شراء المواد";
     protected static ?int $navigationSort = 30;
 
     public static function form(Form $form): Form
@@ -40,27 +40,27 @@ class PurchasingInvoiceResource extends Resource
                     ->relationship('vendors', 'name')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
-                            ->placeholder('ناو')
+                            ->placeholder('اسم')
                             ->suffixIcon('far-user')
-                            ->label('ناو')
+                            ->label('اسم')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('phone')
-                            ->placeholder('ژمارەی مۆبایل')
-                            ->label('ژمارەی مۆبایل')
+                            ->placeholder('رقم الهاتف')
+                            ->label('رقم الهاتف')
                             ->suffixIcon('fas-phone-volume')
                             ->tel()
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('address')
-                            ->label('ناونیشان')
-                            ->placeholder('ناونیشان')
+                            ->label('عنوان')
+                            ->placeholder('عنوان')
                             ->suffixIcon('fas-location-crosshairs')
                             ->required()
                             ->maxLength(255),
                     ])
                     ->options(Vendors::all()->pluck('name', 'id'))
-                    ->label('فرۆشیار')
+                    ->label('بائع')
                     ->searchable(),
                 Select::make('priceType')->options([
                     '$' => '$',
@@ -68,13 +68,13 @@ class PurchasingInvoiceResource extends Resource
                 ])
                     ->disabled(fn($operation) => $operation === 'create')
                     ->hidden(fn($operation) => $operation === 'create')
-                    ->label('جۆری دراو'),
+                    ->label('نوع العملة'),
                 Forms\Components\TextInput::make('paymented')
                     ->label('واصل')
                     ->disabled(fn($operation) => $operation === 'create')
                     ->hidden(fn($operation) => $operation === 'create')
                     ->required()
-                    ->numeric(),
+                    ->numeric(2),
             ]);
     }
 
@@ -85,12 +85,12 @@ class PurchasingInvoiceResource extends Resource
 
             ->columns([
                 Tables\Columns\TextColumn::make('vendors.name')
-                    ->label('فرۆشیار')
-                    ->numeric()
+                    ->label('بائع')
+                    ->numeric(2)
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->label('کۆی گشتی')
+                    ->label('مجموع')
                     ->suffix(' $ ')
                     ->numeric(2)
                     ->summarize(Sum::make()->numeric(2))
@@ -106,17 +106,17 @@ class PurchasingInvoiceResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->formatStateUsing(fn($state, $record) => number_format($record->amount - $record->paymented, 2))
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
-                    ->label('ماوە')
+                    ->label('دین')
                     ->suffix(' $ ')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('کات و بەروار')
+                    ->label('الوقت و التاريخ')
                     ->dateTime('d/m/y H:i:s')
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
                     ->sortable()
             ])
             ->filters([
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

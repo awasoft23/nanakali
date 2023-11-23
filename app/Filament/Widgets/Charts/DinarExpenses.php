@@ -10,7 +10,7 @@ use Flowframe\Trend\TrendValue;
 
 class DinarExpenses extends ChartWidget
 {
-    protected static ?string $heading = 'خەرجییەکان دیناری عێراقی';
+    protected static ?string $heading = "المصاريف بالدينار العراقي";
     public ?string $filter = '1';
 
     protected function getData(): array
@@ -28,7 +28,7 @@ class DinarExpenses extends ChartWidget
                 return [
                     'datasets' => [
                         [
-                            'label' => 'خەرجییەکان',
+                            'label' => 'المصاریف',
                             'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
                         ],
                     ],
@@ -46,7 +46,7 @@ class DinarExpenses extends ChartWidget
                 return [
                     'datasets' => [
                         [
-                            'label' => 'خەرجییەکان',
+                            'label' => 'المصاریف',
                             'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
                         ],
                     ],
@@ -64,7 +64,7 @@ class DinarExpenses extends ChartWidget
                 return [
                     'datasets' => [
                         [
-                            'label' => 'خەرجییەکان',
+                            'label' => 'المصاریف',
                             'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
                         ],
                     ],
@@ -82,7 +82,7 @@ class DinarExpenses extends ChartWidget
                 return [
                     'datasets' => [
                         [
-                            'label' => 'خەرجییەکان',
+                            'label' => 'المصاریف',
                             'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
                         ],
                     ],
@@ -100,7 +100,7 @@ class DinarExpenses extends ChartWidget
                 return [
                     'datasets' => [
                         [
-                            'label' => 'خەرجییەکان',
+                            'label' => 'المصاریف',
                             'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
                         ],
                     ],
@@ -117,10 +117,10 @@ class DinarExpenses extends ChartWidget
     protected function getFilters(): ?array
     {
         return [
-            '1' => 'ئەمڕۆ',
-            '2' => 'ئەم هەفتەیە',
-            '3' => 'ئەم مانگە',
-            '4' => 'ئەمساڵ',
+            '1' => 'اليوم',
+            '2' => 'هذا الاسبوع',
+            '3' => 'هذا الشهر',
+            '4' => 'هذا العام',
         ];
     }
 

@@ -16,19 +16,19 @@ class RecieptsResource extends Resource
 {
     protected static ?string $model = Reciepts::class;
 
-    protected static ?string $label = 'دانان و هەڵگرتنی پارە';
+    protected static ?string $label = "راس المال الأموال والاحتفاظ بها";
 
 
     protected static ?string $navigationIcon = 'far-handshake';
 
     protected static ?string $activeNavigationIcon = 'fas-handshake';
 
-    protected static ?string $navigationLabel = 'خاوەن پشکەکان';
-    protected static ?string $pluralLabel = 'خاوەن پشکەکان';
+    protected static ?string $navigationLabel = "الشرکاء";
+    protected static ?string $pluralLabel = "الشرکاء";
 
-    protected static ?string $pluralModelLabel = 'خاوەن پشکەکان';
+    protected static ?string $pluralModelLabel = "الشرکاء";
 
-    protected static ?string $recordTitleAttribute = 'خاوەن پشکەکان';
+    protected static ?string $recordTitleAttribute = "الشرکاء";
 
     public static function form(Form $form): Form
     {
@@ -38,26 +38,25 @@ class RecieptsResource extends Resource
                     ->options([
                         'صبر محمد مولود' => 'صبر محمد مولود',
                         'ئەیاد عبدولشریف' => 'ئەیاد عبدولشریف',
-                        'ئەشقی ئەحمەد ئیبراهیم' => 'ئەشقی ئەحمەد ئیبراهیم'
                     ])
                     ->searchable()
-                    ->label('خاوەن پشک')
+                    ->label('شريك')
                     ->required(),
                 Forms\Components\TextInput::make('note')
-                    ->label('تێبینی')
+                    ->label('الملاحظة')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('type')
                     ->required()
-                    ->label('جۆری کردار')
+                    ->label('نوع الإجراء')
                     ->searchable()
                     ->default(0)
                     ->options([
-                        0 => 'پارەدانان',
-                        1 => 'پارە بردن'
+                        0 => 'راس المال',
+                        1 => 'أخذ المال'
                     ]),
                 Forms\Components\Select::make('priceType')
-                    ->label('جۆری دراو')
+                    ->label('نوع العملة')
                     ->required()
                     ->searchable()
                     ->default('$')
@@ -66,9 +65,9 @@ class RecieptsResource extends Resource
                         'د.ع' => 'د.ع'
                     ]),
                 Forms\Components\TextInput::make('amount')
-                    ->label('بڕی پارە')
+                    ->label('مبلغ من المال')
                     ->required()
-                    ->numeric(),
+                    ->numeric(2),
             ]);
     }
 
@@ -78,47 +77,46 @@ class RecieptsResource extends Resource
             ->modifyQueryUsing(fn(\Illuminate\Database\Eloquent\Builder $query) => $query->orderBy('id', 'desc')->where('id', '>', 6))
             ->columns([
                 Tables\Columns\TextColumn::make('partnersName')
-                    ->label('خاوەن پشک')
+                    ->label('شريك')
                     ->color(fn($record) => $record->type == 0 ? Color::Green : Color::Red)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('note')
-                    ->label('تێبینی')
+                    ->label('الملاحظة')
                     ->color(fn($record) => $record->type == 0 ? Color::Green : Color::Red)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type')
-                    ->label('جۆر')
+                    ->label('نوع')
                     ->color(fn($record) => $record->type == 0 ? Color::Green : Color::Red)
-                    ->formatStateUsing(fn($state) => $state == 0 ? 'پارەدانان' : 'پارەبردن')
+                    ->formatStateUsing(fn($state) => $state == 0 ? 'راس المال' : 'محسوبات شخصیة')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->label('بڕی پارە')
+                    ->label('مبلغ من المال')
                     ->color(fn($record) => $record->type == 0 ? Color::Green : Color::Red)
                     ->formatStateUsing(fn($state, $record) => $record->priceType == '$' ? number_format($state, 2) . ' ' . $record->priceType : number_format($state, 0) . ' ' . $record->priceType)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('کات و بەروار')
+                    ->label('الوقت و التاريخ')
                     ->color(fn($record) => $record->type == 0 ? Color::Green : Color::Red)
                     ->dateTime('d/m/y H:i:s')
                     ->sortable()
             ])
             ->filters([
                 SelectFilter::make('type')
-                    ->label('جۆری کردار')
+                    ->label('نوع الإجراء')
                     ->searchable()
                     ->options([
-                        0 => 'پارەدانان',
-                        1 => 'پارە بردن'
+                        0 => 'راس المال',
+                        1 => 'أخذ المال'
                     ]),
                 SelectFilter::make('partnersName')
                     ->options([
                         'صبر محمد مولود' => 'صبر محمد مولود',
                         'ئەیاد عبدولشریف' => 'ئەیاد عبدولشریف',
-                        'ئەشقی ئەحمەد ئیبراهیم' => 'ئەشقی ئەحمەد ئیبراهیم'
                     ])
                     ->searchable()
-                    ->label('خاوەن پشک'),
+                    ->label('شريك'),
                 SelectFilter::make('priceType')
-                    ->label('جۆری دراو')
+                    ->label('نوع العملة')
                     ->searchable()
 
                     ->options([

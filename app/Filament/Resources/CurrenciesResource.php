@@ -12,13 +12,13 @@ class CurrenciesResource extends Resource
 {
     protected static ?string $model = Currencies::class;
     protected static ?string $navigationIcon = 'fas-coins';
-    protected static ?string $label = 'نرخی دۆلار';
-    protected static ?string $navigationGroup = 'ڕێکخستنەکان';
+    protected static ?string $label = 'سعر الدولار';
+    protected static ?string $navigationGroup = 'إعدادات';
     protected static ?string $activeNavigationIcon = 'fas-dollar-sign';
-    protected static ?string $navigationLabel = 'نرخی دۆلار';
-    protected static ?string $pluralLabel = 'نرخی دۆلار';
-    protected static ?string $pluralModelLabel = 'نرخی دۆلار';
-    protected static ?string $recordTitleAttribute = 'نرخی دۆلار';
+    protected static ?string $navigationLabel = 'سعر الدولار';
+    protected static ?string $pluralLabel = 'سعر الدولار';
+    protected static ?string $pluralModelLabel = 'سعر الدولار';
+    protected static ?string $recordTitleAttribute = 'سعر الدولار';
     protected static ?int $navigationSort = 45;
 
     public static function table(Table $table): Table
@@ -27,7 +27,7 @@ class CurrenciesResource extends Resource
             ->paginated(false)
             ->columns([
                 Tables\Columns\TextInputColumn::make('dinarPrice')
-                    ->label('نرخی دۆلار'),
+                    ->label('سعر الدولار'),
 
             ])
         ;

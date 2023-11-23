@@ -30,7 +30,7 @@ class EditPurchasingInvoice extends EditRecord
                 'vendors_id' => $this->data['vendors_id'],
                 'amount' => $this->data['paymented'],
                 'purchasing_invoices_id' => $this->data['id'],
-                'note' => 'بڕی پارەی واصل کراو لە کۆی گشتی ($ ' . number_format($this->data['amount'], 2) . ' )' . ' ژمارەی پسولەی (' . $this->data['invoice_id'] . ')',
+                'note' => 'إجمالي المبلغ المستلم($ ' . number_format($this->data['amount'], 2) . ' )' . ' عدد وصل (' . $this->data['invoice_id'] . ')',
                 'created_at' => Carbon::parse($this->data['created_at'])->addHours(3),
                 'dolarPrice' => Currencies::find(1)->dinarPrice,
                 'priceType' => $this->data['priceType'],

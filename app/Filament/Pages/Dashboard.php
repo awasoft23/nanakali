@@ -21,7 +21,7 @@ use Filament\Pages\Page;
 class Dashboard extends Page
 {
     protected static ?string $navigationIcon = 'fas-gauge';
-    protected static ?string $title = 'داشبۆرد';
+    protected static ?string $title = 'لوحة التحكم';
     protected function getHeaderWidgets(): array
     {
         return [

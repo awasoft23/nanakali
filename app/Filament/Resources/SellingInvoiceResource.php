@@ -8,6 +8,7 @@ use App\Models\Customers;
 use App\Models\SellingInvoice;
 use Filament\Actions\Action;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -23,14 +24,14 @@ class SellingInvoiceResource extends Resource
 {
     protected static ?string $model = SellingInvoice::class;
 
-    protected static ?string $label = 'فرۆشتن';
-    protected static ?string $navigationGroup = 'فرۆشتن';
+    protected static ?string $label = 'يبيع';
+    protected static ?string $navigationGroup = 'يبيع';
     protected static ?string $navigationIcon = 'fas-cart-shopping';
     protected static ?string $activeNavigationIcon = 'fas-cart-shopping';
-    protected static ?string $navigationLabel = 'فرۆشتنی کاڵا';
-    protected static ?string $pluralLabel = 'فرۆشتنی کاڵا';
-    protected static ?string $pluralModelLabel = 'فرۆشتنی کاڵا';
-    protected static ?string $recordTitleAttribute = 'فرۆشتنی کاڵا';
+    protected static ?string $navigationLabel = 'البیع';
+    protected static ?string $pluralLabel = 'البیع';
+    protected static ?string $pluralModelLabel = 'البیع';
+    protected static ?string $recordTitleAttribute = 'البیع';
     protected static ?int $navigationSort = 21;
 
     public static function form(Form $form): Form
@@ -42,32 +43,32 @@ class SellingInvoiceResource extends Resource
                     ->relationship('customers', 'name')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
-                            ->placeholder('ناو')
+                            ->placeholder('اسم')
                             ->suffixIcon('far-user')
-                            ->label('ناو')
+                            ->label('اسم')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('phone')
-                            ->placeholder('ژمارەی مۆبایل')
-                            ->label('ژمارەی مۆبایل')
+                            ->placeholder('رقم الهاتف')
+                            ->label('رقم الهاتف')
                             ->suffixIcon('fas-phone-volume')
                             ->tel()
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('address')
-                            ->label('ناونیشان')
-                            ->placeholder('ناونیشان')
+                            ->label('عنوان')
+                            ->placeholder('عنوان')
                             ->suffixIcon('fas-location-crosshairs')
                             ->required()
                             ->maxLength(255),
                     ])
                     ->options(Customers::all()->pluck('name', 'id'))
                     ->searchable()
-                    ->placeholder('کڕیار')
-                    ->label('کڕیار'),
+                    ->placeholder('عميل')
+                    ->label('عميل'),
                 Forms\Components\TextInput::make('note')
-                    ->placeholder('تێبینی')
-                    ->label('تێبینی')
+                    ->placeholder('الملاحظة')
+                    ->label('الملاحظة')
                     ->maxLength(255),
                 Select::make('priceType')->options([
                     '$' => '$',
@@ -76,22 +77,28 @@ class SellingInvoiceResource extends Resource
                     ->live()
                     ->disabled(fn($operation) => $operation === 'create')
                     ->hidden(fn($operation) => $operation === 'create')
-                    ->label('جۆری دراو'),
+                    ->label('نوع العملة'),
                 Forms\Components\TextInput::make('paymented')
-                    ->placeholder('بڕی واصلکراو')
-                    ->label('بڕی واصلکراو')
+                    ->placeholder('تم استلام المبلغ')
+                    ->label('تم استلام المبلغ')
                     ->disabled(fn($operation) => $operation === 'create')
                     ->hidden(fn($operation) => $operation === 'create')
                     ->afterStateHydrated(fn($state) => $state + 250)
                     ->required()
-                    ->numeric(),
+                    ->numeric(2),
                 Forms\Components\TextInput::make('dolarPrice')
-                    ->placeholder('نرخی دۆلار')
-                    ->label('نرخی دۆلار')
+                    ->placeholder('سعر الدولار')
+                    ->label('سعر الدولار')
                     ->disabled()
                     ->hidden(fn($operation, Get $get) => $operation === 'create' || $get('priceType') != 'د.ع')
                     ->required()
-                    ->numeric(),
+                    ->numeric(2),
+                    FileUpload::make('images')
+                    ->image()
+                    ->multiple()
+                    ->imageEditor()
+                    ->label('صور')
+                    ->disk('public')
             ]);
     }
 
@@ -102,21 +109,21 @@ class SellingInvoiceResource extends Resource
             ->columns([
                 TextColumn::make('id')->label('#')->searchable()->badge(true),
                 Tables\Columns\TextColumn::make('customers.name')
-                    ->label('کڕیار')
-                    ->numeric()
+                    ->label('عميل')
+                    ->numeric(2)
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('customers.phone')
-                    ->label('ژمارەی مۆبایل')
+                    ->label('رقم الهاتف')
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->label('بڕی پارە')
-                    ->numeric()
+                    ->label('مبلغ من المال')
+                    ->numeric(2)
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('paymented')
-                    ->label('بڕی واصلکراو')
+                    ->label('تم استلام المبلغ')
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('note')
@@ -124,18 +131,18 @@ class SellingInvoiceResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->color(fn($state, $record) => $record->amount - $record->paymented > 0 ? Color::Red : Color::Green)
-                    ->label('کات و بەروار')
+                    ->label('الوقت و التاريخ')
                     ->dateTime('d/m/y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                ActionsAction::make('print')->hidden(auth()->user()->role == 1)->label('چاپکردن')->url(fn($record) => '/selling-invoices/print/' . $record->id)->icon('fas-print')->openUrlInNewTab()
+                ActionsAction::make('print')->hidden(auth()->user()->role == 1)->label('الطباعة')->url(fn($record) => '/selling-invoices/print/' . $record->id)->icon('fas-print')->openUrlInNewTab()
             ]);
     }
 

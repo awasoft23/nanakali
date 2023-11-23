@@ -32,9 +32,9 @@ class VendorPayments extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
     protected static string $resource = PurchasingInvoiceResource::class;
-    protected static ?string $title = ' لیستی پارەدانەکان';
-    protected ?string $heading = 'لیستی پارەدانەکان';
-    protected static ?string $navigationLabel = 'لیستی پارەدانەکان';
+    protected static ?string $title = 'قائمة المدفوعات';
+    protected ?string $heading = 'قائمة المدفوعات';
+    protected static ?string $navigationLabel = 'قائمة المدفوعات';
 
     protected function getHeaderActions(): array
     {
@@ -47,11 +47,11 @@ class VendorPayments extends Page implements HasForms, HasTable
                 ->color(Color::Red)
                 ->icon('fas-hand-holding-dollar')
                 ->requiresConfirmation()
-                ->modalDescription('لەکاتی ئەنجامدانی ئەم کردارە، بڕی پارەی واصل کراو ناتوانرێت لە قەرزەکان زیاتر بێت، لەدوای واصل کردنی بڕی پارەکە، بەپێی پسولەکان بڕی پارەکە لە کۆنترین پسولەکان واصل دەکرێت بۆ نوێترین.')
-                ->modalButton('پارەدان')
-                ->label('پارەدان')->form(function (Form $form): Form {
+                ->modalDescription('"عند القيام بذلك لا يمكن أن يتجاوز المبلغ المالي المستلم القروض، وبعد استلام المبلغ المالي يتم تحويل المبلغ المالي من أقدم الوصلات إلى الأحدث حسب الوصلات."')
+                ->modalButton('دفع')
+                ->label('دفع')->form(function (Form $form): Form {
                     return $form->schema([
-                        Select::make('vendor_id')->label('فرۆشیار')->options(
+                        Select::make('vendor_id')->label('بائع')->options(
                             Vendors::all()->pluck('name', 'id')
                         )->searchable()
                             ->required()
@@ -78,11 +78,11 @@ class VendorPayments extends Page implements HasForms, HasTable
                                 }
                             })
                             ->live()
-                            ->label('جۆری دراو'),
-                        TextInput::make('notPayment')->label('بڕی قەرز')
+                            ->label('نوع العملة'),
+                        TextInput::make('notPayment')->label('مبلغ القرض')
                             ->required()->disabled(),
-                        TextInput::make('amount')->label('بڕی پارە')
-                            ->numeric()
+                        TextInput::make('amount')->label('مبلغ من المال')
+                            ->numeric(2)
                             ->required()
                             ->maxValue(function (Get $get) {
                                 if ($get('priceType') == '$') {
@@ -95,7 +95,7 @@ class VendorPayments extends Page implements HasForms, HasTable
                                         ->value('totall');
                                 }
                             })->suffix(fn(Get $get) => $get('priceType')),
-                        TextInput::make('note')->label('تێبینی')->required()
+                        TextInput::make('note')->label('الملاحظة')->required()
                     ])->columns(1);
                 })
                 ->action(function (array $data) {
@@ -132,11 +132,11 @@ class VendorPayments extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->modelLabel(' پارە وەرگرتنەکان')
-            ->pluralModelLabel(' پارە وەرگرتنەکان')
+            ->modelLabel('الوصلات')
+            ->pluralModelLabel('الوصلات')
             ->query(ModelsVendorPayments::query()->orderBy('created_at', 'desc'))
             ->columns([
-                TextColumn::make('Vendors.name')->label('فرۆشیار')->searchable(),
+                TextColumn::make('Vendors.name')->label('بائع')->searchable(),
                 TextColumn::make('amount')
                     ->suffix(' $ ')
                     ->description(function ($record) {
@@ -146,31 +146,31 @@ class VendorPayments extends Page implements HasForms, HasTable
                         return $record->priceType != '$' ? number_format($amount, 0) . ' د.ع ' : '';
                     })
                     ->numeric(2)
-                    ->label('بڕی پارە')
+                    ->label('مبلغ من المال')
                     ->searchable()
                     ->summarize([
-                        Summarizer::make()->label('دۆلاری ئەمریکی')->using(function (Builder $query) {
+                        Summarizer::make()->label('الدولار الأمريكي')->using(function (Builder $query) {
                             return $query->where('priceType', '$')->sum('amount');
                         })->numeric(2),
-                        Summarizer::make()->label('دیناری عێراقی')->using(function (Builder $query) {
+                        Summarizer::make()->label('الدينار العراقي')->using(function (Builder $query) {
                             return round($query->where('priceType', '!=', '$')->sum(DB::raw('amount * dolarPrice')) / 250) * 250;
                         })->numeric(0),
-                        Summarizer::make()->label('کۆی گشتی بە دۆلار')->using(function (Builder $query) {
+                        Summarizer::make()->label('الإجمالي بالدولار')->using(function (Builder $query) {
                             return $query->sum(DB::raw('amount'));
                         })->numeric(0),
                     ]),
-                TextColumn::make('dolarPrice')->label('نرخی دۆلار')->numeric()->searchable(),
-                TextColumn::make('note')->label('تێبینی')->searchable(),
-                TextColumn::make('created_at')->label('کات و بەروار')->dateTime('d/m/Y H:i:s'),
+                TextColumn::make('dolarPrice')->label('سعر الدولار')->numeric(2)->searchable(),
+                TextColumn::make('note')->label('الملاحظة')->searchable(),
+                TextColumn::make('created_at')->label('الوقت و التاريخ')->dateTime('d/m/Y H:i:s'),
             ])
             ->actions([
-                Action::make('print')->hidden(auth()->user()->role == 1)->label('چاپکردن')->icon('fas-print')->url(fn($record) => '/purchasing-invoices/printPayment/' . $record->id)->openUrlInNewTab()
+                Action::make('print')->hidden(auth()->user()->role == 1)->label('الطباعة')->icon('fas-print')->url(fn($record) => '/purchasing-invoices/printPayment/' . $record->id)->openUrlInNewTab()
             ])
             ->filters([
-                SelectFilter::make('vendors_id')->label('فرۆشیار')->options(
+                SelectFilter::make('vendors_id')->label('بائع')->options(
                     Vendors::all()->pluck('name', 'id')
                 )->searchable(),
-                DateRangeFilter::make('created_at')->label('بەروار')
+                DateRangeFilter::make('created_at')->label('تاریخ')
             ]);
     }
 

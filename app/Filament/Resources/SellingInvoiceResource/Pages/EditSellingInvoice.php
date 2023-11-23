@@ -44,7 +44,7 @@ class EditSellingInvoice extends EditRecord
                 'customers_id' => $this->data['customers_id'],
                 'amount' => $this->data['paymented'],
                 'selling_invoices_id' => $this->data['id'],
-                'note' => 'بڕی پارەی وەرگیراو  لە کۆی گشتی ($ ' . number_format($total, 2) . ' )' . ' ژمارەی پسولەی (' . $this->data['id'] . ')',
+                'note' => 'المبلغ المالي المستلم من المجموع($ ' . number_format($total, 2) . ' )' . ' عدد وصل (' . $this->data['id'] . ')',
                 'created_at' => Carbon::parse($this->data['created_at'])->addHours(3),
                 'priceType' => $this->data['priceType']
             ]);

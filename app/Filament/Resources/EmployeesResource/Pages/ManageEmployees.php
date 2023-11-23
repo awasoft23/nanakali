@@ -19,9 +19,9 @@ class ManageEmployees extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('list')->label('لیستی غیابات')->color(Color::Gray)->icon('far-square-check')->url('/employees/absenses')->openUrlInNewTab(),
+            Action::make('list')->label('قائمة الغياب')->color(Color::Gray)->icon('far-square-check')->url('/employees/absenses')->openUrlInNewTab(),
             Action::make('absesne')->label('غیابات')->hidden(auth()->user()->role == 1)->form([
-                Select::make('id')->label('فەرمانبەر')->searchable()->options(Employees::all()->pluck('name', 'id'))
+                Select::make('id')->label('موظف')->searchable()->options(Employees::all()->pluck('name', 'id'))
             ])->action(function (array $data) {
                 $record = Employees::find($data['id']);
                 $record->totalAbsense = $record->totalAbsense + 1;
@@ -32,9 +32,9 @@ class ManageEmployees extends ManageRecords
                 ]);
 
             })->requiresConfirmation()
-                ->modalButton('غیابدان')
+                ->modalButton('غياب')
                 ->modalIcon('fas-bolt')
-                ->modalDescription('فەرمانبەر هەڵبژێرە بۆ ئەوەی کرداری غیابدان بە سەرکەوتووی ئەنجام بدەیت.')
+                ->modalDescription('حدد الموظف لتنفيذ إجراء الغياب بنجاح.')
                 ->icon('fas-bolt')
                 ->color(Color::Red),
             Actions\CreateAction::make(),
